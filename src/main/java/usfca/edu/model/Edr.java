@@ -1,3 +1,4 @@
+package usfca.edu.model;
 //package usfca.edu.pojo;
 //
 //import java.sql.Timestamp;
