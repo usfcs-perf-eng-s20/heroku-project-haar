@@ -3,9 +3,20 @@ package usfca.edu.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import usfca.edu.model.Edr;
+import usfca.edu.persistence.EdrRepository;
+
+import java.sql.Timestamp;
 
 @RestController
 public class AnalyticsController {
+
+    private final EdrRepository edrRepository;
+
+    public AnalyticsController(EdrRepository edrRepository) {
+        this.edrRepository = edrRepository;
+    }
+
     @GetMapping("/getAllAPICalls")
     String getAllAPICalls() {
         return "This API will return number of API calls for each service!";
@@ -28,6 +39,10 @@ public class AnalyticsController {
 
     @PostMapping("/saveEdr")
     String saveEdr() {
-        return "This API will be used to send data from other MSs to Analytics MS!";
+        edrRepository.save(new Edr(new Timestamp(System.currentTimeMillis()),
+                "Search MS",
+                120,
+                "Test-1"));
+        return "This API will return number of API calls for selected service!";
     }
 }
