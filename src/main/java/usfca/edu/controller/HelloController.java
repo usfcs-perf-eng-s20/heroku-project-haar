@@ -29,14 +29,14 @@ public class HelloController {
     }
 
     @PostMapping("/saveEdr")
-    Iterable<Edr> saveEdrs() {
+    void saveEdrs() {
 
         Edr edr = new Edr(new Timestamp(System.currentTimeMillis()),
                           "search",
                           System.currentTimeMillis(),
                           "Test");
 
-        return edrRepository.save(edr);
+        edrRepository.save(edr);
     }
 
 }
