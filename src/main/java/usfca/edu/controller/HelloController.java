@@ -1,9 +1,6 @@
 package usfca.edu.controller;
 
-import java.sql.Timestamp;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import usfca.edu.model.Edr;
@@ -28,15 +25,15 @@ public class HelloController {
         return edrRepository.findAll();
     }
 
-    @PostMapping("/saveEdr")
-    void saveEdrs() {
-
-        Edr edr = new Edr(new Timestamp(System.currentTimeMillis()),
-                          "search",
-                          System.currentTimeMillis(),
-                          "Test");
-
-        edrRepository.save(edr);
-    }
+    //    @PostMapping("/saveEdr")
+    //    void saveEdrs() {
+    //
+    //        Edr edr = new Edr(new Timestamp(System.currentTimeMillis()),
+    //                          "search",
+    //                          System.currentTimeMillis(),
+    //                          "Test");
+    //
+    //        edrRepository.save(edr);
+    //    }
 
 }
