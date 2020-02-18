@@ -21,7 +21,7 @@ public class AnalyticsController {
         this.edrRepository = edrRepository;
     }
 
-    @ApiOperation(value = "This API will return number of API calls for each service2!",
+    @ApiOperation(value = "This API will return number of API calls for each service!",
             response = String.class)
     @ApiResponses(
             value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
@@ -38,6 +38,18 @@ public class AnalyticsController {
         return "[Update]This API will return number of API calls for each service2!";
     }
 
+    @ApiOperation(value = "This API will return average response time for selected service!",
+            response = String.class)
+    @ApiResponses(
+            value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
+                     @ApiResponse(code = 401,
+                             message = "You are not authorized to view the resource"),
+                     @ApiResponse(code = 403,
+                             message = "Accessing the resource you were trying to reach is forbidden"),
+                     @ApiResponse(code = 404,
+                             message = "The resource you were trying to reach is not found")
+
+            })
     @GetMapping("/getResponseTime")
     String getResponseTıme() {
         return "This API will return average response time for selected service!";
