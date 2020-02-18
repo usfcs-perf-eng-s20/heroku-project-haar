@@ -35,10 +35,10 @@ public class AnalyticsController {
             })
     @GetMapping("/getAllAPICalls")
     String getAllAPICalls() {
-        return "This API will return number of API calls for each service!";
+        return "[Update]This API will return number of API calls for each service!";
     }
 
-    @GetMapping("/getResponseTıme")
+    @GetMapping("/getResponseTime")
     String getResponseTıme() {
         return "This API will return average response time for selected service!";
     }
