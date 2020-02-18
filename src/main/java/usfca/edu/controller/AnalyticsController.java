@@ -21,7 +21,7 @@ public class AnalyticsController {
         this.edrRepository = edrRepository;
     }
 
-    @ApiOperation(value = "This API will return number of API calls for each service!",
+    @ApiOperation(value = "This API will return number of API calls for each service2!",
             response = String.class)
     @ApiResponses(
             value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
@@ -35,7 +35,7 @@ public class AnalyticsController {
             })
     @GetMapping("/getAllAPICalls")
     String getAllAPICalls() {
-        return "[Update]This API will return number of API calls for each service!";
+        return "[Update]This API will return number of API calls for each service2!";
     }
 
     @GetMapping("/getResponseTime")
