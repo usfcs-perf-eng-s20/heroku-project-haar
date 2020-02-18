@@ -3,7 +3,7 @@ package usfca.edu.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import usfca.edu.model.Edr;
+import usfca.edu.db.model.Edr;
 import usfca.edu.persistence.EdrRepository;
 
 @RestController

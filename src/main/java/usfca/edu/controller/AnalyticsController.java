@@ -4,12 +4,14 @@ import java.sql.Timestamp;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import usfca.edu.model.Edr;
+import usfca.edu.db.model.Edr;
+import usfca.edu.json.model.EdrForm;
 import usfca.edu.persistence.EdrRepository;
 
 @RestController
@@ -66,10 +68,13 @@ public class AnalyticsController {
     }
 
     @PostMapping("/saveEdr")
-    String saveEdr() {
+    String saveEdr(@RequestBody EdrForm edrForm) {
+
+        System.out.println("test.saveEdr....");
+
         edrRepository.save(new Edr(new Timestamp(System.currentTimeMillis()),
-                                   "Search MS",
-                                   120,
+                                   edrForm.getServiceName(),
+                                   edrForm.getProcessingTime(),
                                    "Test-1"));
         return "This API will return number of API calls for selected service!";
     }

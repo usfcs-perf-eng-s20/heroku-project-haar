@@ -1,4 +1,4 @@
-package usfca.edu.model;
+package usfca.edu.db.model;
 
 import java.sql.Timestamp;
 

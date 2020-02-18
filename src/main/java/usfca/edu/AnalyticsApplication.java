@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import usfca.edu.model.Edr;
+import usfca.edu.db.model.Edr;
 import usfca.edu.persistence.EdrRepository;
 
 @SpringBootApplication
