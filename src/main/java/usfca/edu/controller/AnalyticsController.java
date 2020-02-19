@@ -1,16 +1,16 @@
 package usfca.edu.controller;
 
-import java.sql.Timestamp;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import usfca.edu.db.model.Edr;
+import usfca.edu.db.service.EdrService;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.persistence.EdrRepository;
 
@@ -18,9 +18,11 @@ import usfca.edu.persistence.EdrRepository;
 public class AnalyticsController {
 
     private final EdrRepository edrRepository;
+    private final EdrService    edrService;
 
-    public AnalyticsController(EdrRepository edrRepository) {
+    public AnalyticsController(EdrRepository edrRepository, EdrService edrService) {
         this.edrRepository = edrRepository;
+        this.edrService = edrService;
     }
 
     @ApiOperation(value = "This API will return number of API calls for each service!",
@@ -68,14 +70,16 @@ public class AnalyticsController {
     }
 
     @PostMapping("/saveEdr")
+    @ResponseStatus(value = HttpStatus.OK)
     String saveEdr(@RequestBody EdrForm edrForm) {
 
         System.out.println("test.saveEdr....");
 
-        edrRepository.save(new Edr(new Timestamp(System.currentTimeMillis()),
-                                   edrForm.getServiceName(),
-                                   edrForm.getProcessingTime(),
-                                   "Test-1"));
-        return "This API will return number of API calls for selected service!";
+        if (edrService.saveEdr(edrForm)) {
+            return "Edr saved successfully!";
+        } else {
+            return "Edr could not be saved!";
+        }
+
     }
 }
