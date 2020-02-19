@@ -16,34 +16,28 @@ public class Edr {
     @GeneratedValue
     private Long      id;
 
-    @Column
+    @Column(name = "timestamp")
     private Timestamp timestamp;
 
-    @Column
-    private String    microServiceName;
-
-    @Column
+    @Column(name = "processingTimeInMiliseconds")
     private long      processingTimeInMiliseconds;
 
-    @Column
+    @Column(name = "serviceName")
     private String    serviceName;
 
-    @Column
+    @Column(name = "path")
     private String    path;
 
-    @Column
+    @Column(name = "method")
     private String    method;
 
-    @Column
+    @Column(name = "username")
     private String    username;
 
-    @Column
-    private long      processingTime;
-
-    @Column
+    @Column(name = "responseCode")
     private String    responseCode;
 
-    @Column
+    @Column(name = "success")
     private boolean   success;
 
     public Edr() {
@@ -57,13 +51,11 @@ public class Edr {
         } catch (Exception e) {
             this.timestamp = new Timestamp(System.currentTimeMillis());
         }
-        this.microServiceName = edrForm.getServiceName();
-        this.processingTimeInMiliseconds = edrForm.getProcessingTime();
+        this.processingTimeInMiliseconds = edrForm.getProcessingTimeInMiliseconds();
         this.serviceName = edrForm.getServiceName();
         this.path = edrForm.getPath();
         this.method = edrForm.getMethod();
         this.username = edrForm.getUsername();
-        this.processingTime = edrForm.getProcessingTime();
         this.responseCode = edrForm.getResponseCode();
         this.success = edrForm.getSuccess();
     }
@@ -82,14 +74,6 @@ public class Edr {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public String getMicroServiceName() {
-        return microServiceName;
-    }
-
-    public void setMicroServiceName(String microServiceName) {
-        this.microServiceName = microServiceName;
     }
 
     public long getProcessingTimeInMiliseconds() {
@@ -130,14 +114,6 @@ public class Edr {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public long getProcessingTime() {
-        return processingTime;
-    }
-
-    public void setProcessingTime(long processingTime) {
-        this.processingTime = processingTime;
     }
 
     public String getResponseCode() {

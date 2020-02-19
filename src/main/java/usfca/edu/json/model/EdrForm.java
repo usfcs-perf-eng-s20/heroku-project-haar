@@ -14,7 +14,7 @@ public class EdrForm {
 
     private String     username;
 
-    private long       processingTime;
+    private long       processingTimeInMiliseconds;
 
     private String     responseCode;
 
@@ -43,10 +43,6 @@ public class EdrForm {
 
     public String getUsername() {
         return username;
-    }
-
-    public long getProcessingTime() {
-        return processingTime;
     }
 
     public String getResponseCode() {
@@ -83,15 +79,27 @@ public class EdrForm {
         this.username = username;
     }
 
-    public void setProcessingTime(long processingTime) {
-        this.processingTime = processingTime;
-    }
-
     public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public Parameters getParametersObject() {
+        return ParametersObject;
+    }
+
+    public void setParametersObject(Parameters parametersObject) {
+        ParametersObject = parametersObject;
+    }
+
+    public long getProcessingTimeInMiliseconds() {
+        return processingTimeInMiliseconds;
+    }
+
+    public void setProcessingTimeInMiliseconds(long processingTimeInMiliseconds) {
+        this.processingTimeInMiliseconds = processingTimeInMiliseconds;
     }
 }
