@@ -10,7 +10,7 @@ public class EdrForm {
 
     private String     method;
 
-    private Parameters ParametersObject;
+    private Parameters parameters;
 
     private String     username;
 
@@ -35,10 +35,6 @@ public class EdrForm {
 
     public String getMethod() {
         return method;
-    }
-
-    public Parameters getParameters() {
-        return ParametersObject;
     }
 
     public String getUsername() {
@@ -71,10 +67,6 @@ public class EdrForm {
         this.method = method;
     }
 
-    public void setParameters(Parameters parametersObject) {
-        this.ParametersObject = parametersObject;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -87,19 +79,19 @@ public class EdrForm {
         this.success = success;
     }
 
-    public Parameters getParametersObject() {
-        return ParametersObject;
-    }
-
-    public void setParametersObject(Parameters parametersObject) {
-        ParametersObject = parametersObject;
-    }
-
     public long getProcessingTimeInMiliseconds() {
         return processingTimeInMiliseconds;
     }
 
     public void setProcessingTimeInMiliseconds(long processingTimeInMiliseconds) {
         this.processingTimeInMiliseconds = processingTimeInMiliseconds;
+    }
+
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Parameters parameters) {
+        this.parameters = parameters;
     }
 }
