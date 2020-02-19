@@ -69,6 +69,7 @@ public class AnalyticsController {
         return "This API will return number of API calls for selected service!";
     }
 
+    @ApiOperation(value = "This API will save EDR to database!", response = String.class)
     @PostMapping("/saveEdr")
     @ResponseStatus(value = HttpStatus.OK)
     String saveEdr(@RequestBody EdrForm edrForm) {
