@@ -77,9 +77,9 @@ public class AnalyticsController {
         System.out.println("test.saveEdr....");
 
         if (edrService.saveEdr(edrForm)) {
-            return "Edr saved successfully!!!!!!";
+            return "Edr saved successfully!!!!!!!!!!!!";
         } else {
-            return "Edr could not be saved!!!!!!";
+            return "Edr could not be saved!!!!!!!!!!!!";
         }
 
     }
