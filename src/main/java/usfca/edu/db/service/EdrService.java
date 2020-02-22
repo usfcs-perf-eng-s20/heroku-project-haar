@@ -7,6 +7,8 @@ import usfca.edu.db.model.Edr;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.persistence.EdrRepository;
 
+import java.util.List;
+
 @Service
 public class EdrService implements EdrServiceInterface {
 
@@ -24,5 +26,18 @@ public class EdrService implements EdrServiceInterface {
 
         return true;
     }
+
+    @Override
+    public List<Edr> getAllEdr() {
+        return (List<Edr>) edrRepository.findAll();
+    }
+
+
+
+    @Override
+    public List<Edr> getEdrsByServiceName(String serviceName) {
+        return (List<Edr>) edrRepository.findByServiceName(serviceName);
+    }
+
 
 }
