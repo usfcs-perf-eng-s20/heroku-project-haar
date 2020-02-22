@@ -7,6 +7,8 @@ import usfca.edu.db.model.Edr;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.persistence.EdrRepository;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,6 +39,13 @@ public class EdrService implements EdrServiceInterface {
     @Override
     public List<Edr> getEdrsByServiceName(String serviceName) {
         return (List<Edr>) edrRepository.findByServiceName(serviceName);
+    }
+
+    @Override
+    public List<Edr> getEdrByTime(long timestamp) {
+        System.out.println(timestamp);
+        System.out.println(new Date(new Timestamp(timestamp*1000).getTime()));
+        return edrRepository.findBySpecificTime(new Timestamp(timestamp));
     }
 
 

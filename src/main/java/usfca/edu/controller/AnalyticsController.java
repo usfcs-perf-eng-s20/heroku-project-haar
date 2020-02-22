@@ -38,10 +38,9 @@ public class AnalyticsController {
                             message = "The resource you were trying to reach is not found")
 
             })
-    @GetMapping("/getAllAPICalls")
-    Date getAllAPICalls(@RequestParam("date") @DateTimeFormat(pattern="MMddyyyy") Date date) {
-        System.out.println(date.toString());
-        return date;
+    @GetMapping("/getAllAPICallsByTime")
+    List<Edr> getAllAPICallsByTime(@RequestParam("date") long timestamp) {
+        return edrService.getEdrByTime(timestamp);
     }
 
     @ApiOperation(value = "This API will return average response time for selected service!",
