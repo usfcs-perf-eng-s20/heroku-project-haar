@@ -4,6 +4,3 @@ logs
 *.log
 npm-debug.log*
 node_modules
-data
-data-pilot
-config.js
