@@ -28,8 +28,11 @@ npm start 500
 ### how to check the database via command line
 #### requirements
 - needs postgresql installed
-- needs heroku cli installed
-- after cloning the heroku directory
+````
+brew install postgresql
+````
+- needs heroku cli installed:  https://devcenter.heroku.com/articles/heroku-cli
+- after cloning the heroku directory for the project
 #### access heroku postgres db
 ````
 heroku pg:psql
@@ -39,7 +42,11 @@ check all tables
 ````
 \d
 ````
-- you can run normal sql commands from this terminal
+check specific table
+````
+\d tablename
+````
+you can run normal sql commands from this terminal
 ````
 SELECT COUNT(*) FROM edr;
 SELECT * FROM edr;
