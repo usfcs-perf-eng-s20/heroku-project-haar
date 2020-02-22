@@ -17,7 +17,7 @@ public interface EdrRepository extends JpaRepository<Edr, Long> {
     @Query("SELECT e FROM Edr e WHERE e.serviceName = :serviceName")
     public List<Edr> findByServiceName(@Param("serviceName") String serviceName);
 
-    @Query("SELECT e FROM edr e WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd")
+    @Query("SELECT e FROM Edr e WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd")
     public List<Edr> findBySpecificTime(Timestamp timestampStart,Timestamp timestampEnd);
 
 }
