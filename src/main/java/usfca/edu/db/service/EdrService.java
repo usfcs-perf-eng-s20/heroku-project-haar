@@ -42,10 +42,10 @@ public class EdrService implements EdrServiceInterface {
     }
 
     @Override
-    public List<Edr> getEdrByTime(long timestamp) {
-        System.out.println(timestamp);
-        System.out.println(new Date(new Timestamp(timestamp*1000).getTime()));
-        return edrRepository.findBySpecificTime(new Timestamp(timestamp));
+    public List<Edr> getEdrByTime(long timestampStart,long timestampEnd) {
+        System.out.println(timestampStart);
+        System.out.println(new Date(new Timestamp(timestampStart*1000).getTime()));
+        return edrRepository.findBySpecificTime(new Timestamp(timestampStart), new Timestamp(timestampEnd));
     }
 
 

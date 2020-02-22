@@ -13,5 +13,5 @@ public interface EdrServiceInterface {
 
     public List<Edr> getEdrsByServiceName(String serviceName);
 
-    public List<Edr> getEdrByTime(long timestamp);
+    public List<Edr> getEdrByTime(long timestampStart,long timestampEnd);
 }

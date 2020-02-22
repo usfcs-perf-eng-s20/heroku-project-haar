@@ -12,6 +12,7 @@ import usfca.edu.db.service.EdrService;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.persistence.EdrRepository;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,10 @@ public class AnalyticsController {
             })
     @GetMapping("/getAllAPICallsByTime")
     List<Edr> getAllAPICallsByTime(@RequestParam("date") long timestamp) {
-        return edrService.getEdrByTime(timestamp);
+        long timestampStart= timestamp;
+        long timestampEnd=timestampStart+86400000;
+
+        return edrService.getEdrByTime(timestampStart,timestampEnd);
     }
 
     @ApiOperation(value = "This API will return average response time for selected service!",
