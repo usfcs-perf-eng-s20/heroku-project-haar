@@ -73,7 +73,7 @@ public class AnalyticsController {
 
     }
 
-    @GetMapping("/getNumberOfAPICall")
+    @GetMapping("/getNumberOfAPICallByService")
     String getNumberOfAPICallByService(String serviceName) {
         List<Edr> edrList = edrService.getEdrsByServiceName(serviceName);
 
@@ -82,8 +82,6 @@ public class AnalyticsController {
         }else{
             return "No Edrs Found for this service:" + serviceName;
         }
-
-
     }
 
 
