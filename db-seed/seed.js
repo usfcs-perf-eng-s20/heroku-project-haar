@@ -37,8 +37,6 @@ for (let i = 0; i < request_count; i++) {
 
 	let data = JSON.stringify(getRandomData());
 
-	console.log(data)
-
 	let options = {
 	  hostname: 'heroku-analytics-boot.herokuapp.com',
 	  port: 443,
