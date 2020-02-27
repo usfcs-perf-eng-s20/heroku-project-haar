@@ -38,9 +38,9 @@ for (let i = 0; i < request_count; i++) {
 	let data = JSON.stringify(getRandomData());
 
 	let options = {
-	  hostname: 'heroku-analytics-boot.herokuapp.com',
+	  hostname: config.hostname,
 	  port: 443,
-	  path: '/saveEdr',
+	  path: config.path,
 	  method: 'POST',
 	  headers: {
 	    'Content-Type': 'application/json',
