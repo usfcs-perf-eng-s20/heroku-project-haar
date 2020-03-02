@@ -38,15 +38,20 @@ public class EdrService {
 
         long timeDifference = timestampEnd - timestampStart;
 
-        long frequency = 1;
+        long totalInterval = 1;
+        long eachIntervalInMs = 0;
         if (interval.equalsIgnoreCase(Constants.INTERVAL_MINUTES)) {
-            frequency = timeDifference / Constants.MINUTES_MS;
+            totalInterval = timeDifference / Constants.MINUTES_MS;
+            eachIntervalInMs = Constants.MINUTES_MS;
         } else if (interval.equalsIgnoreCase(Constants.INTERVAL_HOURS)) {
-            frequency = timeDifference / Constants.HOURS_MS;
+            totalInterval = timeDifference / Constants.HOURS_MS;
+            eachIntervalInMs = Constants.HOURS_MS;
         } else if (interval.equalsIgnoreCase(Constants.INTERVAL_DAYS)) {
-            frequency = timeDifference / Constants.DAYS_MS;
+            totalInterval = timeDifference / Constants.DAYS_MS;
+            eachIntervalInMs = Constants.DAYS_MS;
         } else if (interval.equalsIgnoreCase(Constants.INTERVAL_WEEKS)) {
-            frequency = timeDifference / Constants.WEEKS_MS;
+            totalInterval = timeDifference / Constants.WEEKS_MS;
+            eachIntervalInMs = Constants.WEEKS_MS;
         } else {
             /**
              * DEFAULT..
@@ -55,13 +60,14 @@ public class EdrService {
         }
 
         System.out.println("TimeDifference:" + timeDifference);
-        System.out.println("Frequency:" + frequency);
+        System.out.println("Frequency:" + totalInterval);
 
-        for (int i = 1; i <= frequency; i++) {
+        for (int i = 1; i <= totalInterval; i++) {
+            timestampEnd = timestampStart + (eachIntervalInMs * i);
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                                  new Timestamp(timestampEnd));
-            timestampStart = timestampStart + i;
             kpiFormList.addAll(convertIntoOneCumulativeForm(edrList, timestampStart, timestampEnd));
+            timestampStart = timestampEnd;
         }
 
         return kpiFormList;
