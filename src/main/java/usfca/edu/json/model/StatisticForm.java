@@ -1,6 +1,12 @@
 package usfca.edu.json.model;
 
+import java.util.Date;
+
 public class StatisticForm {
+
+    private Date   startTime;
+
+    private Date   endTime;
 
     private String serviceName = "";
 
@@ -30,6 +36,22 @@ public class StatisticForm {
 
     public void setError(int error) {
         this.error = error;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
 }
