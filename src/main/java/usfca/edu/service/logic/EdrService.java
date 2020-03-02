@@ -63,7 +63,7 @@ public class EdrService {
         System.out.println("Frequency:" + totalInterval);
 
         for (int i = 1; i <= totalInterval; i++) {
-            timestampEnd = timestampStart + (eachIntervalInMs * i);
+            timestampEnd = timestampStart + eachIntervalInMs;
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                                  new Timestamp(timestampEnd));
             kpiFormList.addAll(convertIntoOneCumulativeForm(edrList, timestampStart, timestampEnd));
