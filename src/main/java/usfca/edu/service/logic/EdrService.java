@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import usfca.edu.config.Constants;
 import usfca.edu.db.model.Edr;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.json.model.KpiForm;
@@ -53,17 +54,17 @@ public class EdrService {
             if (!edr.isSuccess()) {
                 allErrorCount++;
             }
-            if (edr.getServiceName().equalsIgnoreCase("search")) {
+            if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_SEARCH)) {
                 searchRequestCount++;
                 if (!edr.isSuccess()) {
                     searchErrorCount++;
                 }
-            } else if (edr.getServiceName().equalsIgnoreCase("login")) {
+            } else if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_LOGIN)) {
                 loginRequestCount++;
                 if (!edr.isSuccess()) {
                     loginErrorCount++;
                 }
-            } else if (edr.getServiceName().equalsIgnoreCase("favorite")) {
+            } else if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_FAVORITES)) {
                 favoriteRequestCount++;
                 if (!edr.isSuccess()) {
                     favoriteErrorCount++;
