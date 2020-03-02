@@ -1,15 +1,15 @@
 package usfca.edu.db.service;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import usfca.edu.db.model.Edr;
 import usfca.edu.json.model.EdrForm;
+import usfca.edu.json.model.KpiForm;
 import usfca.edu.persistence.EdrRepository;
-
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class EdrService implements EdrServiceInterface {
@@ -30,23 +30,38 @@ public class EdrService implements EdrServiceInterface {
     }
 
     @Override
-    public List<Edr> getAllEdr() {
-        return (List<Edr>) edrRepository.findAll();
-    }
+    public List<Edr> getEdrByTimeWithInterval(String service, long timestampStart,
+                                              long timestampEnd, String interval) {
+        List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
+                                                             new Timestamp(timestampEnd));
 
-
-
-    @Override
-    public List<Edr> getEdrsByServiceName(String serviceName) {
-        return (List<Edr>) edrRepository.findByServiceName(serviceName);
+        return edrList;
     }
 
     @Override
-    public List<Edr> getEdrByTime(long timestampStart,long timestampEnd) {
-        System.out.println(timestampStart);
-        System.out.println(new Date(new Timestamp(timestampStart*1000).getTime()));
-        return edrRepository.findBySpecificTime(new Timestamp(timestampStart), new Timestamp(timestampEnd));
+    public List<KpiForm> calculateKpiByTimeWithInterval(String service, long timestampStart,
+                                                        long timestampEnd, String interval) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
+    @Override
+    public List<KpiForm> calculateKpiByTimeWithCumulative(String serviceName, long timestampStart,
+                                                          long timestampEnd) {
+        List<KpiForm> kpiFormList = null;
+        if (serviceName != null && !serviceName.equalsIgnoreCase("all")) {
+            List<Edr> edrList = edrRepository
+                    .findBySpecificTimeByService(serviceName,
+                                                 new Timestamp(timestampStart),
+                                                 new Timestamp(timestampEnd));
+        } else {
+            List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
+                                                                 new Timestamp(timestampEnd));
+
+        }
+
+        return kpiFormList;
+
+    }
 
 }

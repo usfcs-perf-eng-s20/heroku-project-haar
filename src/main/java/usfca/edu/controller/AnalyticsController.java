@@ -1,8 +1,14 @@
 package usfca.edu.controller;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -10,11 +16,8 @@ import io.swagger.annotations.ApiResponses;
 import usfca.edu.db.model.Edr;
 import usfca.edu.db.service.EdrService;
 import usfca.edu.json.model.EdrForm;
+import usfca.edu.json.model.KpiForm;
 import usfca.edu.persistence.EdrRepository;
-
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 public class AnalyticsController {
@@ -31,62 +34,37 @@ public class AnalyticsController {
             response = String.class)
     @ApiResponses(
             value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
-                    @ApiResponse(code = 401,
-                            message = "You are not authorized to view the resource"),
-                    @ApiResponse(code = 403,
-                            message = "Accessing the resource you were trying to reach is forbidden"),
-                    @ApiResponse(code = 404,
-                            message = "The resource you were trying to reach is not found")
+                     @ApiResponse(code = 401,
+                             message = "You are not authorized to view the resource"),
+                     @ApiResponse(code = 403,
+                             message = "Accessing the resource you were trying to reach is forbidden"),
+                     @ApiResponse(code = 404,
+                             message = "The resource you were trying to reach is not found")
 
             })
-    @GetMapping("/getAllAPICallsByTime")
-    List<Edr> getAllAPICallsByTime(@RequestParam("date") long timestamp) {
-        long timestampStart= timestamp;
-        long timestampEnd=timestampStart+86400000;
-
-        return edrService.getEdrByTime(timestampStart,timestampEnd);
-    }
-
-    @ApiOperation(value = "This API will return average response time for selected service!",
-            response = String.class)
-    @ApiResponses(
-            value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
-                    @ApiResponse(code = 401,
-                            message = "You are not authorized to view the resource"),
-                    @ApiResponse(code = 403,
-                            message = "Accessing the resource you were trying to reach is forbidden"),
-                    @ApiResponse(code = 404,
-                            message = "The resource you were trying to reach is not found")
-
-            })
-    @GetMapping("/getResponseTime")
-    String getResponseTıme() {
-        return "This API will return average response time for selected service!";
-    }
-
-    @GetMapping("/getNumberOfError")
-    String getNumberOfError() {
-        return "This API will return number of errors for selected service!";
-    }
-
-    @GetMapping("/getNumberOfAPICall")
-    String getNumberOfAPICall() {
-
-        return "This API will return number of API calls for selected service!";
-
-    }
-
-    @GetMapping("/getNumberOfAPICallByService")
-    String getNumberOfAPICallByService(String serviceName) {
-        List<Edr> edrList = edrService.getEdrsByServiceName(serviceName);
-
-        if(edrList!=null){
-            return  "API Call Number For Service:"+serviceName+":"+edrList.size();
-        }else{
-            return "No Edrs Found for this service:" + serviceName;
+    @GetMapping("/getKpis")
+    List<KpiForm> getKpis(@RequestParam("service") String service,
+                          @RequestParam("startTime") long startTime,
+                          @RequestParam("endTime") long endTime,
+                          @RequestParam("interval") String interval) {
+        List<KpiForm> kpiFormList;
+        if (interval == null) {
+            kpiFormList = edrService.calculateKpiByTimeWithCumulative(service, startTime, endTime);
+        } else {
+            kpiFormList = edrService
+                    .calculateKpiByTimeWithInterval(service, startTime, endTime, interval);
         }
+
+        return kpiFormList;
     }
 
+    @GetMapping("/getStats")
+    List<Edr> getStats(@RequestParam("service") String service,
+                       @RequestParam("startTime") long startTime,
+                       @RequestParam("endTime") long endTime,
+                       @RequestParam("interval") String interval) {
+        return null;
+    }
 
     @ApiOperation(value = "This API will save EDR to database!", response = String.class)
     @PostMapping("/saveEdr")

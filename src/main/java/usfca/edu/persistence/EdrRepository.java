@@ -14,9 +14,14 @@ import usfca.edu.db.model.Edr;
 public interface EdrRepository extends JpaRepository<Edr, Long> {
 
     @Query("SELECT e FROM Edr e WHERE e.serviceName = :serviceName")
-    public List<Edr> findByServiceName(@Param("serviceName") String serviceName);
+    public List<Edr> findByServiceName(@Param("service") String serviceName);
 
     @Query("SELECT e FROM Edr e WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd")
     public List<Edr> findBySpecificTime(Timestamp timestampStart, Timestamp timestampEnd);
+
+    @Query("SELECT e FROM Edr e WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd"
+            + " and e.serviceName = :serviceName ")
+    public List<Edr> findBySpecificTimeByService(String serviceName, Timestamp timestampStart,
+                                                 Timestamp timestampEnd);
 
 }
