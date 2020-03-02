@@ -60,9 +60,16 @@ public class EdrService {
         }
 
         System.out.println("TimeDifference:" + timeDifference);
-        System.out.println("Frequency:" + totalInterval);
+        System.out.println("TotalInterval:" + totalInterval);
+
+        if (totalInterval == 0) {
+            System.out.println("TotalInterval:" + totalInterval
+                    + ", Can not divide into intervals. So calculating cumulative.");
+            return getStatsByTimeWithCumulative(timestampStart, timestampEnd);
+        }
 
         for (int i = 1; i <= totalInterval; i++) {
+            System.out.println("" + i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                                  new Timestamp(timestampEnd));
