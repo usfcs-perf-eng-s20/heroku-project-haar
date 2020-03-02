@@ -36,10 +36,6 @@ public class EdrService {
         List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                              new Timestamp(timestampEnd));
 
-        /**
-         * TODO:
-         */
-
         return kpiFormList;
     }
 

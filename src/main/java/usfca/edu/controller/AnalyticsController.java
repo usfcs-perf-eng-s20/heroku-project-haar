@@ -60,10 +60,10 @@ public class AnalyticsController {
     }
 
     @GetMapping("/getStats")
-    List<StatisticForm> getStats(@RequestParam("service") String service,
+    List<StatisticForm> getStats(@RequestParam(required = false) String service,
                                  @RequestParam("startTime") long startTime,
                                  @RequestParam("endTime") long endTime,
-                                 @RequestParam("interval") String interval) {
+                                 @RequestParam(required = false) String interval) {
         List<StatisticForm> statisticFormList = new ArrayList<StatisticForm>();
         if (interval == null) {
             statisticFormList = edrService.getStatsByTimeWithCumulative(startTime, endTime);
