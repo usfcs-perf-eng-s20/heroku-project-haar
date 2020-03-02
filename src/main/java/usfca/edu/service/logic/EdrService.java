@@ -44,6 +44,8 @@ public class EdrService {
         List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
         List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                              new Timestamp(timestampEnd));
+        System.out.println("edrList Size:" + edrList.size());
+
         int allErrorCount = 0, searchErrorCount = 0, loginErrorCount = 0, favoriteErrorCount = 0,
                 searchRequestCount = 0, loginRequestCount = 0, favoriteRequestCount = 0;
 

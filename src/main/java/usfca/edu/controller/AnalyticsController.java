@@ -1,6 +1,8 @@
 package usfca.edu.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -65,9 +67,18 @@ public class AnalyticsController {
                                  @RequestParam("endTime") long endTime,
                                  @RequestParam(required = false) String interval) {
         List<StatisticForm> statisticFormList = new ArrayList<StatisticForm>();
+
+        System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
+        System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
+
         if (interval == null) {
+
+            System.out.println("GetStats API called without interval");
+
             statisticFormList = edrService.getStatsByTimeWithCumulative(startTime, endTime);
         } else {
+            System.out.println("GetStats API called with interval:" + interval);
+
             statisticFormList = edrService
                     .getStatsByTimeWithInterval(service, startTime, endTime, interval);
         }
