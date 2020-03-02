@@ -1,5 +1,6 @@
 package usfca.edu.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import usfca.edu.db.model.Edr;
-import usfca.edu.db.service.EdrService;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.json.model.KpiForm;
+import usfca.edu.json.model.StatisticForm;
 import usfca.edu.persistence.EdrRepository;
+import usfca.edu.service.logic.EdrService;
 
 @RestController
 public class AnalyticsController {
@@ -59,11 +60,18 @@ public class AnalyticsController {
     }
 
     @GetMapping("/getStats")
-    List<Edr> getStats(@RequestParam("service") String service,
-                       @RequestParam("startTime") long startTime,
-                       @RequestParam("endTime") long endTime,
-                       @RequestParam("interval") String interval) {
-        return null;
+    List<StatisticForm> getStats(@RequestParam("service") String service,
+                                 @RequestParam("startTime") long startTime,
+                                 @RequestParam("endTime") long endTime,
+                                 @RequestParam("interval") String interval) {
+        List<StatisticForm> statisticFormList = new ArrayList<StatisticForm>();
+        if (interval == null) {
+            statisticFormList = edrService.getStatsByTimeWithCumulative(startTime, endTime);
+        } else {
+            statisticFormList = edrService
+                    .getStatsByTimeWithInterval(service, startTime, endTime, interval);
+        }
+        return statisticFormList;
     }
 
     @ApiOperation(value = "This API will save EDR to database!", response = String.class)
