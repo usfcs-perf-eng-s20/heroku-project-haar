@@ -17,7 +17,12 @@ function getRandomData() {
 	let responseCode = config.responseCode[getRandom(0, config.responseCode.length)]
 	let success = config.success[getRandom(0, config.success.length)]
 	let username = config.username[getRandom(0, config.username.length)]
-	let timestamp = Math.round(new Date().getTime()/1000);
+	let timestamp = Math.round(new Date().getTime() / 1000);
+
+	if(config.timestamp.length > 0) {
+		timestamp = config.timestamp[getRandom(0, config.timestamp.length)] + getRandom(0, 30000)
+		timestamp = timestamp * 1000
+	}
 
 	let data = {
 		"method": config.services[service_idx].requests[request_idx].method,
@@ -26,7 +31,7 @@ function getRandomData() {
 		"responseCode": responseCode,
 		"serviceName": config.services[service_idx].name,
 		"success": success,
-		"timestamp": timestamp,
+		"timestamp": timestamp.toString(),
 		"username": username
 	}
 
@@ -36,19 +41,17 @@ function getRandomData() {
 for (let i = 0; i < request_count; i++) {
 
 	let data = JSON.stringify(getRandomData());
-
 	let options = {
-	  //hostname: 'heroku-analytics-boot.herokuapp.com',
-	  hostname: 'prod-analytics-boot.herokuapp.com',
+	  hostname: config.hostname,
 	  port: 443,
-	  path: '/saveEdr',
+	  path: config.path,
 	  method: 'POST',
 	  headers: {
 	    'Content-Type': 'application/json',
 	    'Content-Length': data.length
 	  }
 	}
-
+	console.log(data)
 	const req = https.request(options, (res) => {
 		responses.push(res);
 		completed_requests++;
