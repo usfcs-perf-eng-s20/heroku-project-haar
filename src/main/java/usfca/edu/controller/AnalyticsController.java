@@ -71,13 +71,14 @@ public class AnalyticsController {
         System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
         System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
 
-        if (interval == null) {
-
-            System.out.println("GetStats API called without interval");
+        if (interval == null || interval.equalsIgnoreCase("") || service == null
+                || service.equalsIgnoreCase("")) {
+            System.out.println("GetStats API called without interval or service.");
 
             statisticFormList = edrService.getStatsByTimeWithCumulative(startTime, endTime);
         } else {
-            System.out.println("GetStats API called with interval:" + interval);
+            System.out.println("GetStats API called with interval:" + interval + " and service :"
+                    + service);
 
             statisticFormList = edrService
                     .getStatsByTimeWithInterval(service, startTime, endTime, interval);

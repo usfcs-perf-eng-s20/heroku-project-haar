@@ -17,7 +17,7 @@ function getRandomData() {
 	let responseCode = config.responseCode[getRandom(0, config.responseCode.length)]
 	let success = config.success[getRandom(0, config.success.length)]
 	let username = config.username[getRandom(0, config.username.length)]
-	let timestamp = Math.round(new Date().getTime());
+	let timestamp = Math.round(new Date().getTime() / 1000);
 
 	if(config.timestamp.length > 0) {
 		timestamp = config.timestamp[getRandom(0, config.timestamp.length)] + getRandom(0, 30000)

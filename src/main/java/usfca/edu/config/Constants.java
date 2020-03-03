@@ -2,6 +2,8 @@ package usfca.edu.config;
 
 public class Constants {
 
+    public static final String SERVICE_ALL       = "all";
+
     public static final String SERVICE_SEARCH    = "search";
 
     public static final String SERVICE_LOGIN     = "login";

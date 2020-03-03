@@ -35,9 +35,7 @@ public class EdrService {
     public List<StatisticForm> getStatsByTimeWithInterval(String service, long timestampStart,
                                                           long timestampEnd, String interval) {
         List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
-
         long timeDifference = timestampEnd - timestampStart;
-
         long totalInterval = 1;
         long eachIntervalInMs = 0;
         if (interval.equalsIgnoreCase(Constants.INTERVAL_MINUTES)) {
@@ -71,12 +69,21 @@ public class EdrService {
         for (int i = 1; i <= totalInterval; i++) {
             System.out.println("" + i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
-            List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
-                                                                 new Timestamp(timestampEnd));
-            kpiFormList.addAll(convertIntoOneCumulativeForm(edrList, timestampStart, timestampEnd));
-            timestampStart = timestampEnd;
-        }
 
+            if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
+                List<Edr> edrList = edrRepository
+                        .findBySpecificTimeByService(service,
+                                                     new Timestamp(timestampStart),
+                                                     new Timestamp(timestampEnd));
+                kpiFormList.addAll(convertIntoOneCumulativeForm(service,
+                                                                edrList,
+                                                                timestampStart,
+                                                                timestampEnd));
+                timestampStart = timestampEnd;
+            } else {//ALL
+                kpiFormList.addAll(getStatsByTimeWithCumulative(timestampStart, timestampEnd));
+            }
+        }
         return kpiFormList;
     }
 
@@ -87,7 +94,7 @@ public class EdrService {
                                                              new Timestamp(timestampEnd));
         System.out.println("edrList Size:" + edrList.size());
 
-        kpiFormList = convertIntoOneCumulativeForm(edrList, timestampStart, timestampEnd);
+        kpiFormList = convertIntoOneCumulativeForm(null, edrList, timestampStart, timestampEnd);
 
         return kpiFormList;
     }
@@ -131,8 +138,8 @@ public class EdrService {
      * @param edrList
      * @return
      */
-    public List<StatisticForm> convertIntoOneCumulativeForm(List<Edr> edrList, long startTime,
-                                                            long endTime) {
+    public List<StatisticForm> convertIntoOneCumulativeForm(String service, List<Edr> edrList,
+                                                            long startTime, long endTime) {
         List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
         int allErrorCount = 0, searchErrorCount = 0, loginErrorCount = 0, favoriteErrorCount = 0,
                 searchRequestCount = 0, loginRequestCount = 0, favoriteRequestCount = 0;
@@ -162,41 +169,51 @@ public class EdrService {
             }
         }
 
-        // ALL
-        StatisticForm allStatForm = new StatisticForm();
-        allStatForm.setServiceName("All");
-        allStatForm.setNumApiCalls(edrList.size());
-        allStatForm.setError(allErrorCount);
-        allStatForm.setStartTime(startDate);
-        allStatForm.setEndTime(endDate);
+        if (service == null) {
+            // ALL
+            StatisticForm allStatForm = new StatisticForm();
+            allStatForm.setServiceName("All");
+            allStatForm.setNumApiCalls(edrList.size());
+            allStatForm.setError(allErrorCount);
+            allStatForm.setStartTime(startDate);
+            allStatForm.setEndTime(endDate);
 
-        StatisticForm searchStatForm = new StatisticForm();
-        searchStatForm.setServiceName("search");
-        searchStatForm.setNumApiCalls(searchRequestCount);
-        searchStatForm.setError(searchErrorCount);
-        searchStatForm.setStartTime(startDate);
-        searchStatForm.setEndTime(endDate);
+            StatisticForm searchStatForm = new StatisticForm();
+            searchStatForm.setServiceName("search");
+            searchStatForm.setNumApiCalls(searchRequestCount);
+            searchStatForm.setError(searchErrorCount);
+            searchStatForm.setStartTime(startDate);
+            searchStatForm.setEndTime(endDate);
 
-        StatisticForm loginStatForm = new StatisticForm();
-        loginStatForm.setServiceName("login");
-        loginStatForm.setNumApiCalls(loginRequestCount);
-        loginStatForm.setError(loginErrorCount);
-        loginStatForm.setStartTime(startDate);
-        loginStatForm.setEndTime(endDate);
+            StatisticForm loginStatForm = new StatisticForm();
+            loginStatForm.setServiceName("login");
+            loginStatForm.setNumApiCalls(loginRequestCount);
+            loginStatForm.setError(loginErrorCount);
+            loginStatForm.setStartTime(startDate);
+            loginStatForm.setEndTime(endDate);
 
-        StatisticForm favStatForm = new StatisticForm();
-        favStatForm.setServiceName("favorite");
-        favStatForm.setNumApiCalls(favoriteRequestCount);
-        favStatForm.setError(favoriteErrorCount);
-        favStatForm.setStartTime(startDate);
-        favStatForm.setEndTime(endDate);
+            StatisticForm favStatForm = new StatisticForm();
+            favStatForm.setServiceName("favorite");
+            favStatForm.setNumApiCalls(favoriteRequestCount);
+            favStatForm.setError(favoriteErrorCount);
+            favStatForm.setStartTime(startDate);
+            favStatForm.setEndTime(endDate);
 
-        kpiFormList.add(allStatForm);
-        kpiFormList.add(searchStatForm);
-        kpiFormList.add(loginStatForm);
-        kpiFormList.add(favStatForm);
+            kpiFormList.add(allStatForm);
+            kpiFormList.add(searchStatForm);
+            kpiFormList.add(loginStatForm);
+            kpiFormList.add(favStatForm);
 
-        return kpiFormList;
+            return kpiFormList;
+        } else {
+            StatisticForm statForm = new StatisticForm();
+            statForm.setServiceName(service);
+            statForm.setNumApiCalls(edrList.size());
+            statForm.setError(allErrorCount);
+            statForm.setStartTime(startDate);
+            statForm.setEndTime(endDate);
+            return kpiFormList;
+        }
     }
 
 }
