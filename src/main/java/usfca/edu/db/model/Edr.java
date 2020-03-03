@@ -47,7 +47,7 @@ public class Edr {
     public Edr(EdrForm edrForm) {
         super();
         try {
-            this.timestamp = Timestamp.valueOf(edrForm.getTimestamp());
+            this.timestamp = new Timestamp(Long.parseLong(edrForm.getTimestamp()));
         } catch (Exception e) {
             this.timestamp = new Timestamp(System.currentTimeMillis());
         }
