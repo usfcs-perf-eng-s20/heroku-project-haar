@@ -2,23 +2,21 @@ package usfca.edu.json.model;
 
 public class EdrForm {
 
-    private String     serviceName;
+    private String  serviceName;
 
-    private String     path;
+    private String  path;
 
-    private String     timestamp;
+    private String  timestamp;
 
-    private String     method;
+    private String  method;
 
-    private Parameters parameters;
+    private String  username;
 
-    private String     username;
+    private long    processingTimeInMiliseconds;
 
-    private long       processingTimeInMiliseconds;
+    private String  responseCode;
 
-    private String     responseCode;
-
-    private boolean    success;
+    private boolean success;
 
     // Getter Methods 
     public String getServiceName() {
@@ -87,11 +85,4 @@ public class EdrForm {
         this.processingTimeInMiliseconds = processingTimeInMiliseconds;
     }
 
-    public Parameters getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(Parameters parameters) {
-        this.parameters = parameters;
-    }
 }
