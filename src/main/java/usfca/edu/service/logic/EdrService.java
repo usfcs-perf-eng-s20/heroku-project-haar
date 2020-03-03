@@ -35,9 +35,7 @@ public class EdrService {
     public List<StatisticForm> getStatsByTimeWithInterval(String service, long timestampStart,
                                                           long timestampEnd, String interval) {
         List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
-
         long timeDifference = timestampEnd - timestampStart;
-
         long totalInterval = 1;
         long eachIntervalInMs = 0;
         if (interval.equalsIgnoreCase(Constants.INTERVAL_MINUTES)) {
@@ -71,12 +69,20 @@ public class EdrService {
         for (int i = 1; i <= totalInterval; i++) {
             System.out.println("" + i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
-            List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
-                                                                 new Timestamp(timestampEnd));
-            kpiFormList.addAll(convertIntoOneCumulativeForm(edrList, timestampStart, timestampEnd));
-            timestampStart = timestampEnd;
-        }
 
+            if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
+                List<Edr> edrList = edrRepository
+                        .findBySpecificTimeByService(service,
+                                                     new Timestamp(timestampStart),
+                                                     new Timestamp(timestampEnd));
+                kpiFormList.addAll(convertIntoOneCumulativeForm(edrList,
+                                                                timestampStart,
+                                                                timestampEnd));
+                timestampStart = timestampEnd;
+            } else {//ALL
+                kpiFormList.addAll(getStatsByTimeWithCumulative(timestampStart, timestampEnd));
+            }
+        }
         return kpiFormList;
     }
 
