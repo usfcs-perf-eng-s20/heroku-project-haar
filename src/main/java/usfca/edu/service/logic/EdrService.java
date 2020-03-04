@@ -82,11 +82,11 @@ public class EdrService {
                                                                 edrList,
                                                                 timestampStart,
                                                                 timestampEnd));
-                timestampStart = timestampEnd;
             } else {//ALL
                 kpiFormList
                         .addAll(getStatsByTimeWithCumulative(null, timestampStart, timestampEnd));
             }
+            timestampStart = timestampEnd;
         }
         return kpiFormList;
     }
