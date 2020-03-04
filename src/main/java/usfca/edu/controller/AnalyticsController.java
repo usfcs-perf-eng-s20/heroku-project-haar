@@ -61,6 +61,21 @@ public class AnalyticsController {
         return kpiFormList;
     }
 
+    @ApiOperation(
+            value = "getStats API will return numbers of API calls/Error Counts interval by interval for a given "
+                    + "service within the given time! If interval parameter is empty, API will return cumulative "
+                    + "results for given service. ",
+            response = String.class)
+    @ApiResponses(
+            value = {@ApiResponse(code = 200, message = "Returns Statistic Form"),
+                     @ApiResponse(code = 401,
+                             message = "You are not authorized to view the resource"),
+                     @ApiResponse(code = 403,
+                             message = "Accessing the resource you were trying to reach is forbidden"),
+                     @ApiResponse(code = 404,
+                             message = "The resource you were trying to reach is not found")
+
+            })
     @GetMapping("/getStats")
     List<StatisticForm> getStats(@RequestParam(required = false) String service,
                                  @RequestParam("startTime") long startTime,
