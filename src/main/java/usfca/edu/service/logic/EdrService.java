@@ -136,10 +136,8 @@ public class EdrService {
         List<KpiForm> kpiFormList = null;
         if (service == null) {
             System.out.println("Getting KPIs for all services.");
-            List<Edr> edrList = edrRepository
-                    .findBySpecificTimeByService(service,
-                                                 new Timestamp(timestampStart),
-                                                 new Timestamp(timestampEnd));
+            List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
+                                                                 new Timestamp(timestampEnd));
             System.out.println("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeKpiForm(service,
                                                           edrList,
@@ -148,8 +146,10 @@ public class EdrService {
 
         } else {
             System.out.println("Getting KPIs for service:" + service);
-            List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
-                                                                 new Timestamp(timestampEnd));
+            List<Edr> edrList = edrRepository
+                    .findBySpecificTimeByService(service,
+                                                 new Timestamp(timestampStart),
+                                                 new Timestamp(timestampEnd));
 
             System.out
                     .print("Calculate cumulative KPI values for all services in a given StartTime:"
