@@ -74,8 +74,13 @@ public class AnalyticsController {
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
             System.out.println("GetStats API called without interval or service.");
-
-            statisticFormList = edrService.getStatsByTimeWithCumulative(startTime, endTime);
+            statisticFormList = edrService.getStatsByTimeWithCumulative(null, startTime, endTime);
+        }
+        //if service specific
+        else if (interval == null || interval.equalsIgnoreCase("")) {
+            System.out.println("GetStats API called without interval.");
+            statisticFormList = edrService
+                    .getStatsByTimeWithCumulative(service, startTime, endTime);
         } else {
             System.out.println("GetStats API called with interval:" + interval + " and service :"
                     + service);
