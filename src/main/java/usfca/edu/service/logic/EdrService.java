@@ -103,7 +103,10 @@ public class EdrService {
                                                  new Timestamp(timestampStart),
                                                  new Timestamp(timestampEnd));
             System.out.println("edrList Size:" + edrList.size());
-            kpiFormList = convertIntoOneCumulativeForm(null, edrList, timestampStart, timestampEnd);
+            kpiFormList = convertIntoOneCumulativeForm(service,
+                                                       edrList,
+                                                       timestampStart,
+                                                       timestampEnd);
         }
 
         return kpiFormList;
