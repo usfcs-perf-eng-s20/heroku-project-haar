@@ -93,11 +93,15 @@ public class EdrService {
         List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
 
         if (service == null) {
+            System.out.println("Getting edrs for all services.");
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                                  new Timestamp(timestampEnd));
             System.out.println("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeForm(null, edrList, timestampStart, timestampEnd);
         } else {
+
+            System.out.println("Getting edrs for service:" + service);
+
             List<Edr> edrList = edrRepository
                     .findBySpecificTimeByService(service,
                                                  new Timestamp(timestampStart),
