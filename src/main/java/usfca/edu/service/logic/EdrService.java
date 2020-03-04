@@ -278,17 +278,26 @@ public class EdrService {
                 if (minSearchResponseTime > edr.getProcessingTimeInMiliseconds()) {
                     minSearchResponseTime = edr.getProcessingTimeInMiliseconds();
                 }
+                if (maxSearchResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                    maxSearchResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
             } else if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_LOGIN)) {
                 loginRequestCount++;
                 loginProcessingTime += edr.getProcessingTimeInMiliseconds();
                 if (minLoginResponseTime > edr.getProcessingTimeInMiliseconds()) {
                     minLoginResponseTime = edr.getProcessingTimeInMiliseconds();
                 }
+                if (maxLoginResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                    maxLoginResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
             } else if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_FAVORITES)) {
                 favoriteRequestCount++;
                 favoriteProcessingTime += edr.getProcessingTimeInMiliseconds();
                 if (minFavoriteResponseTime > edr.getProcessingTimeInMiliseconds()) {
                     minFavoriteResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+                if (maxFavoriteResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                    maxFavoriteResponseTime = edr.getProcessingTimeInMiliseconds();
                 }
             }
             if (minResponseTime > edr.getProcessingTimeInMiliseconds()) {
