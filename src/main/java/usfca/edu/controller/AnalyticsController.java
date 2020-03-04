@@ -51,6 +51,9 @@ public class AnalyticsController {
                           @RequestParam("endTime") long endTime,
                           @RequestParam(required = false) String interval) {
         List<KpiForm> kpiFormList;
+        System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
+        System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
+
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
             System.out.println("GetKpis API called without interval or service.");

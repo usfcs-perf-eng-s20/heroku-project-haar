@@ -255,7 +255,7 @@ public class EdrService {
 
     public List<KpiForm> convertIntoOneCumulativeKpiForm(String service, List<Edr> edrList,
                                                          long startTime, long endTime) {
-        System.out.println("EdrService.convertIntoOneCumulativeStatForm.");
+        System.out.println("EdrService.convertIntoOneCumulativeKpiForm.");
 
         List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
         int searchRequestCount = 0, loginRequestCount = 0, favoriteRequestCount = 0;
@@ -300,10 +300,17 @@ public class EdrService {
             totalProcessingTime += edr.getProcessingTimeInMiliseconds();
         }
 
-        avgSearchResponseTime = searchProcessingTime / searchRequestCount;
-        avgLoginResponseTime = loginProcessingTime / loginRequestCount;
-        avgFavoriteResponseTime = favoriteProcessingTime / favoriteRequestCount;
-        avgResponseTime = totalProcessingTime / edrList.size();
+        avgSearchResponseTime = (double) (searchProcessingTime / searchRequestCount);
+        avgLoginResponseTime = (double) (loginProcessingTime / loginRequestCount);
+        avgFavoriteResponseTime = (double) (favoriteProcessingTime / favoriteRequestCount);
+        avgResponseTime = (double) (totalProcessingTime / edrList.size());
+
+        System.out.println("avgResponseTime:" + avgResponseTime);
+        System.out.println("totalProcessingTime:" + totalProcessingTime);
+        System.out.println("total requests:" + edrList.size());
+        System.out.println("avgFavoriteResponseTime:" + avgFavoriteResponseTime);
+        System.out.println("favoriteProcessingTime:" + favoriteProcessingTime);
+        System.out.println("favoriteRequestCount:" + favoriteRequestCount);
 
         if (service == null) {
             // ALL
