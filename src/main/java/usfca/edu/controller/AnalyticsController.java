@@ -33,10 +33,10 @@ public class AnalyticsController {
         this.edrService = edrService;
     }
 
-    @ApiOperation(value = "This API will return number of API calls for each service!",
+    @ApiOperation(value = "getKpis API will return KPI values!(Min/Avg/Max Response Times) ",
             response = String.class)
     @ApiResponses(
-            value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
+            value = {@ApiResponse(code = 200, message = "Returns list of KpiForm!"),
                      @ApiResponse(code = 401,
                              message = "You are not authorized to view the resource"),
                      @ApiResponse(code = 403,
