@@ -1,20 +1,26 @@
 package usfca.edu.json.model;
 
+import java.util.Date;
+
 public class KpiForm {
+
+    private Date   startTime;
+
+    private Date   endTime;
 
     private String serviceName;
 
-    private int    avgRespTime;
+    private double avgRespTime;
 
-    private int    minRespTime;
+    private double minRespTime;
 
-    private int    maxRespTime;
+    private double maxRespTime;
 
-    private int    avgRpsTime;
+    private double avgRpsTime;
 
-    private int    minRpsTime;
+    private double minRpsTime;
 
-    private int    maxRpsTime;
+    private double maxRpsTime;
 
     public String getServiceName() {
         return serviceName;
@@ -24,51 +30,67 @@ public class KpiForm {
         this.serviceName = serviceName;
     }
 
-    public int getAvgRespTime() {
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public double getAvgRespTime() {
         return avgRespTime;
     }
 
-    public void setAvgRespTime(int avgRespTime) {
+    public void setAvgRespTime(double avgRespTime) {
         this.avgRespTime = avgRespTime;
     }
 
-    public int getMinRespTime() {
+    public double getMinRespTime() {
         return minRespTime;
     }
 
-    public void setMinRespTime(int minRespTime) {
+    public void setMinRespTime(double minRespTime) {
         this.minRespTime = minRespTime;
     }
 
-    public int getMaxRespTime() {
+    public double getMaxRespTime() {
         return maxRespTime;
     }
 
-    public void setMaxRespTime(int maxRespTime) {
+    public void setMaxRespTime(double maxRespTime) {
         this.maxRespTime = maxRespTime;
     }
 
-    public int getAvgRpsTime() {
+    public double getAvgRpsTime() {
         return avgRpsTime;
     }
 
-    public void setAvgRpsTime(int avgRpsTime) {
+    public void setAvgRpsTime(double avgRpsTime) {
         this.avgRpsTime = avgRpsTime;
     }
 
-    public int getMinRpsTime() {
+    public double getMinRpsTime() {
         return minRpsTime;
     }
 
-    public void setMinRpsTime(int minRpsTime) {
+    public void setMinRpsTime(double minRpsTime) {
         this.minRpsTime = minRpsTime;
     }
 
-    public int getMaxRpsTime() {
+    public double getMaxRpsTime() {
         return maxRpsTime;
     }
 
-    public void setMaxRpsTime(int maxRpsTime) {
+    public void setMaxRpsTime(double maxRpsTime) {
         this.maxRpsTime = maxRpsTime;
     }
 

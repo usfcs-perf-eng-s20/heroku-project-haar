@@ -46,14 +46,18 @@ public class AnalyticsController {
 
             })
     @GetMapping("/getKpis")
-    List<KpiForm> getKpis(@RequestParam("service") String service,
+    List<KpiForm> getKpis(@RequestParam(required = false) String service,
                           @RequestParam("startTime") long startTime,
                           @RequestParam("endTime") long endTime,
-                          @RequestParam("interval") String interval) {
+                          @RequestParam(required = false) String interval) {
         List<KpiForm> kpiFormList;
-        if (interval == null) {
+        if (interval == null || interval.equalsIgnoreCase("") || service == null
+                || service.equalsIgnoreCase("")) {
+            System.out.println("GetKpis API called without interval or service.");
             kpiFormList = edrService.calculateKpiByTimeWithCumulative(service, startTime, endTime);
         } else {
+            System.out.println("GetKpis API called with interval:" + interval + " and service :"
+                    + service);
             kpiFormList = edrService
                     .calculateKpiByTimeWithInterval(service, startTime, endTime, interval);
         }
