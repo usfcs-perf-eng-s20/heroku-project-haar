@@ -33,10 +33,10 @@ public class AnalyticsController {
         this.edrService = edrService;
     }
 
-    @ApiOperation(value = "This API will return number of API calls for each service!",
+    @ApiOperation(value = "getKpis API will return KPI values!(Min/Avg/Max Response Times) ",
             response = String.class)
     @ApiResponses(
-            value = {@ApiResponse(code = 200, message = "Test getAllAPICalls!"),
+            value = {@ApiResponse(code = 200, message = "Returns list of KpiForm!"),
                      @ApiResponse(code = 401,
                              message = "You are not authorized to view the resource"),
                      @ApiResponse(code = 403,
@@ -46,14 +46,21 @@ public class AnalyticsController {
 
             })
     @GetMapping("/getKpis")
-    List<KpiForm> getKpis(@RequestParam("service") String service,
+    List<KpiForm> getKpis(@RequestParam(required = false) String service,
                           @RequestParam("startTime") long startTime,
                           @RequestParam("endTime") long endTime,
-                          @RequestParam("interval") String interval) {
+                          @RequestParam(required = false) String interval) {
         List<KpiForm> kpiFormList;
-        if (interval == null) {
+        System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
+        System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
+
+        if (interval == null || interval.equalsIgnoreCase("") || service == null
+                || service.equalsIgnoreCase("")) {
+            System.out.println("GetKpis API called without interval or service.");
             kpiFormList = edrService.calculateKpiByTimeWithCumulative(service, startTime, endTime);
         } else {
+            System.out.println("GetKpis API called with interval:" + interval + " and service :"
+                    + service);
             kpiFormList = edrService
                     .calculateKpiByTimeWithInterval(service, startTime, endTime, interval);
         }
@@ -61,6 +68,21 @@ public class AnalyticsController {
         return kpiFormList;
     }
 
+    @ApiOperation(
+            value = "getStats API will return numbers of API calls/Error Counts interval by interval for a given "
+                    + "service within the given time! If interval parameter is empty, API will return cumulative "
+                    + "results for given service. ",
+            response = String.class)
+    @ApiResponses(
+            value = {@ApiResponse(code = 200, message = "Returns Statistic Form"),
+                     @ApiResponse(code = 401,
+                             message = "You are not authorized to view the resource"),
+                     @ApiResponse(code = 403,
+                             message = "Accessing the resource you were trying to reach is forbidden"),
+                     @ApiResponse(code = 404,
+                             message = "The resource you were trying to reach is not found")
+
+            })
     @GetMapping("/getStats")
     List<StatisticForm> getStats(@RequestParam(required = false) String service,
                                  @RequestParam("startTime") long startTime,
@@ -74,8 +96,8 @@ public class AnalyticsController {
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
             System.out.println("GetStats API called without interval or service.");
-
-            statisticFormList = edrService.getStatsByTimeWithCumulative(startTime, endTime);
+            statisticFormList = edrService
+                    .getStatsByTimeWithCumulative(service, startTime, endTime);
         } else {
             System.out.println("GetStats API called with interval:" + interval + " and service :"
                     + service);

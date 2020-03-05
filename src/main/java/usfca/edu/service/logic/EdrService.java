@@ -34,7 +34,10 @@ public class EdrService {
 
     public List<StatisticForm> getStatsByTimeWithInterval(String service, long timestampStart,
                                                           long timestampEnd, String interval) {
-        List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
+
+        System.out.println("EdrService.getStatsByTimeWithInterval.");
+
+        List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
         long timeDifference = timestampEnd - timestampStart;
         long totalInterval = 1;
         long eachIntervalInMs = 0;
@@ -54,7 +57,7 @@ public class EdrService {
             /**
              * DEFAULT..
              */
-            return getStatsByTimeWithCumulative(timestampStart, timestampEnd);
+            return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
         System.out.println("TimeDifference:" + timeDifference);
@@ -63,7 +66,7 @@ public class EdrService {
         if (totalInterval == 0) {
             System.out.println("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
-            return getStatsByTimeWithCumulative(timestampStart, timestampEnd);
+            return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
@@ -75,26 +78,48 @@ public class EdrService {
                         .findBySpecificTimeByService(service,
                                                      new Timestamp(timestampStart),
                                                      new Timestamp(timestampEnd));
-                kpiFormList.addAll(convertIntoOneCumulativeForm(service,
-                                                                edrList,
-                                                                timestampStart,
-                                                                timestampEnd));
-                timestampStart = timestampEnd;
+                statFormList.addAll(convertIntoOneCumulativeStatForm(service,
+                                                                     edrList,
+                                                                     timestampStart,
+                                                                     timestampEnd));
             } else {//ALL
-                kpiFormList.addAll(getStatsByTimeWithCumulative(timestampStart, timestampEnd));
+                statFormList
+                        .addAll(getStatsByTimeWithCumulative(null, timestampStart, timestampEnd));
             }
+            timestampStart = timestampEnd;
         }
-        return kpiFormList;
+        return statFormList;
     }
 
-    public List<StatisticForm> getStatsByTimeWithCumulative(long timestampStart,
+    public List<StatisticForm> getStatsByTimeWithCumulative(String service, long timestampStart,
                                                             long timestampEnd) {
-        List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
-        List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
-                                                             new Timestamp(timestampEnd));
-        System.out.println("edrList Size:" + edrList.size());
+        System.out.println("EdrService.getStatsByTimeWithCumulative.");
 
-        kpiFormList = convertIntoOneCumulativeForm(null, edrList, timestampStart, timestampEnd);
+        List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
+
+        if (service == null) {
+            System.out.println("Getting edrs for all services.");
+            List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
+                                                                 new Timestamp(timestampEnd));
+            System.out.println("edrList Size:" + edrList.size());
+            kpiFormList = convertIntoOneCumulativeStatForm(null,
+                                                           edrList,
+                                                           timestampStart,
+                                                           timestampEnd);
+        } else {
+
+            System.out.println("Getting edrs for service:" + service);
+
+            List<Edr> edrList = edrRepository
+                    .findBySpecificTimeByService(service,
+                                                 new Timestamp(timestampStart),
+                                                 new Timestamp(timestampEnd));
+            System.out.println("edrList Size:" + edrList.size());
+            kpiFormList = convertIntoOneCumulativeStatForm(service,
+                                                           edrList,
+                                                           timestampStart,
+                                                           timestampEnd);
+        }
 
         return kpiFormList;
     }
@@ -105,17 +130,26 @@ public class EdrService {
         return null;
     }
 
-    public List<KpiForm> calculateKpiByTimeWithCumulative(String serviceName, long timestampStart,
+    public List<KpiForm> calculateKpiByTimeWithCumulative(String service, long timestampStart,
                                                           long timestampEnd) {
+        System.out.println("EdrService.calculateKpiByTimeWithCumulative.");
         List<KpiForm> kpiFormList = null;
-        if (serviceName != null && !serviceName.equalsIgnoreCase("all")) {
-            List<Edr> edrList = edrRepository
-                    .findBySpecificTimeByService(serviceName,
-                                                 new Timestamp(timestampStart),
-                                                 new Timestamp(timestampEnd));
-        } else {
+        if (service == null) {
+            System.out.println("Getting KPIs for all services.");
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                                                                  new Timestamp(timestampEnd));
+            System.out.println("edrList Size:" + edrList.size());
+            kpiFormList = convertIntoOneCumulativeKpiForm(service,
+                                                          edrList,
+                                                          timestampStart,
+                                                          timestampEnd);
+
+        } else {
+            System.out.println("Getting KPIs for service:" + service);
+            List<Edr> edrList = edrRepository
+                    .findBySpecificTimeByService(service,
+                                                 new Timestamp(timestampStart),
+                                                 new Timestamp(timestampEnd));
 
             System.out
                     .print("Calculate cumulative KPI values for all services in a given StartTime:"
@@ -138,9 +172,11 @@ public class EdrService {
      * @param edrList
      * @return
      */
-    public List<StatisticForm> convertIntoOneCumulativeForm(String service, List<Edr> edrList,
-                                                            long startTime, long endTime) {
-        List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
+    public List<StatisticForm> convertIntoOneCumulativeStatForm(String service, List<Edr> edrList,
+                                                                long startTime, long endTime) {
+        System.out.println("EdrService.convertIntoOneCumulativeStatForm.");
+
+        List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
         int allErrorCount = 0, searchErrorCount = 0, loginErrorCount = 0, favoriteErrorCount = 0,
                 searchRequestCount = 0, loginRequestCount = 0, favoriteRequestCount = 0;
 
@@ -199,12 +235,12 @@ public class EdrService {
             favStatForm.setStartTime(startDate);
             favStatForm.setEndTime(endDate);
 
-            kpiFormList.add(allStatForm);
-            kpiFormList.add(searchStatForm);
-            kpiFormList.add(loginStatForm);
-            kpiFormList.add(favStatForm);
+            statFormList.add(allStatForm);
+            statFormList.add(searchStatForm);
+            statFormList.add(loginStatForm);
+            statFormList.add(favStatForm);
 
-            return kpiFormList;
+            return statFormList;
         } else {
             StatisticForm statForm = new StatisticForm();
             statForm.setServiceName(service);
@@ -212,6 +248,128 @@ public class EdrService {
             statForm.setError(allErrorCount);
             statForm.setStartTime(startDate);
             statForm.setEndTime(endDate);
+            statFormList.add(statForm);
+            return statFormList;
+        }
+    }
+
+    public List<KpiForm> convertIntoOneCumulativeKpiForm(String service, List<Edr> edrList,
+                                                         long startTime, long endTime) {
+        System.out.println("EdrService.convertIntoOneCumulativeKpiForm.");
+
+        List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
+        int searchRequestCount = 0, loginRequestCount = 0, favoriteRequestCount = 0;
+        double searchProcessingTime = 0, loginProcessingTime = 0, favoriteProcessingTime = 0,
+                totalProcessingTime = 0;
+        double avgSearchResponseTime = 0, avgLoginResponseTime = 0, avgFavoriteResponseTime = 0,
+                avgResponseTime = 0;
+        double minSearchResponseTime = Integer.MAX_VALUE, minLoginResponseTime = Integer.MAX_VALUE,
+                minFavoriteResponseTime = Integer.MAX_VALUE, minResponseTime = Integer.MAX_VALUE;
+        double maxSearchResponseTime = Integer.MIN_VALUE, maxLoginResponseTime = Integer.MIN_VALUE,
+                maxFavoriteResponseTime = Integer.MIN_VALUE, maxResponseTime = Integer.MIN_VALUE;
+
+        Date startDate = new Date(new Timestamp(startTime).getTime());
+        Date endDate = new Date(new Timestamp(endTime).getTime());
+
+        for (Edr edr : edrList) {
+            if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_SEARCH)) {
+                searchRequestCount++;
+                searchProcessingTime += edr.getProcessingTimeInMiliseconds();
+                if (minSearchResponseTime > edr.getProcessingTimeInMiliseconds()) {
+                    minSearchResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+                if (maxSearchResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                    maxSearchResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+            } else if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_LOGIN)) {
+                loginRequestCount++;
+                loginProcessingTime += edr.getProcessingTimeInMiliseconds();
+                if (minLoginResponseTime > edr.getProcessingTimeInMiliseconds()) {
+                    minLoginResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+                if (maxLoginResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                    maxLoginResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+            } else if (edr.getServiceName().equalsIgnoreCase(Constants.SERVICE_FAVORITES)) {
+                favoriteRequestCount++;
+                favoriteProcessingTime += edr.getProcessingTimeInMiliseconds();
+                if (minFavoriteResponseTime > edr.getProcessingTimeInMiliseconds()) {
+                    minFavoriteResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+                if (maxFavoriteResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                    maxFavoriteResponseTime = edr.getProcessingTimeInMiliseconds();
+                }
+            }
+            if (minResponseTime > edr.getProcessingTimeInMiliseconds()) {
+                minResponseTime = edr.getProcessingTimeInMiliseconds();
+            }
+            if (maxResponseTime < edr.getProcessingTimeInMiliseconds()) {
+                maxResponseTime = edr.getProcessingTimeInMiliseconds();
+            }
+            totalProcessingTime += edr.getProcessingTimeInMiliseconds();
+        }
+
+        avgSearchResponseTime = (double) (searchProcessingTime / searchRequestCount);
+        avgLoginResponseTime = (double) (loginProcessingTime / loginRequestCount);
+        avgFavoriteResponseTime = (double) (favoriteProcessingTime / favoriteRequestCount);
+        avgResponseTime = (double) (totalProcessingTime / edrList.size());
+
+        System.out.println("avgResponseTime:" + avgResponseTime);
+        System.out.println("totalProcessingTime:" + totalProcessingTime);
+        System.out.println("total requests:" + edrList.size());
+        System.out.println("avgFavoriteResponseTime:" + avgFavoriteResponseTime);
+        System.out.println("favoriteProcessingTime:" + favoriteProcessingTime);
+        System.out.println("favoriteRequestCount:" + favoriteRequestCount);
+
+        if (service == null) {
+            // ALL
+            KpiForm kpiallForm = new KpiForm();
+            kpiallForm.setServiceName("All");
+            kpiallForm.setAvgRespTime(avgResponseTime);
+            kpiallForm.setMaxRespTime(maxResponseTime);
+            kpiallForm.setMinRespTime(minResponseTime);
+            kpiallForm.setStartTime(startDate);
+            kpiallForm.setEndTime(endDate);
+
+            KpiForm searchKpiForm = new KpiForm();
+            searchKpiForm.setServiceName("search");
+            searchKpiForm.setAvgRespTime(avgSearchResponseTime);
+            searchKpiForm.setMaxRespTime(maxSearchResponseTime);
+            searchKpiForm.setMinRespTime(minSearchResponseTime);
+            searchKpiForm.setStartTime(startDate);
+            searchKpiForm.setEndTime(endDate);
+
+            KpiForm loginKpiForm = new KpiForm();
+            loginKpiForm.setServiceName("login");
+            loginKpiForm.setAvgRespTime(avgLoginResponseTime);
+            loginKpiForm.setMaxRespTime(maxLoginResponseTime);
+            loginKpiForm.setMinRespTime(minLoginResponseTime);
+            loginKpiForm.setStartTime(startDate);
+            loginKpiForm.setEndTime(endDate);
+
+            KpiForm favKpiForm = new KpiForm();
+            favKpiForm.setServiceName("favorites");
+            favKpiForm.setAvgRespTime(avgFavoriteResponseTime);
+            favKpiForm.setMaxRespTime(maxFavoriteResponseTime);
+            favKpiForm.setMinRespTime(minFavoriteResponseTime);
+            favKpiForm.setStartTime(startDate);
+            favKpiForm.setEndTime(endDate);
+
+            kpiFormList.add(kpiallForm);
+            kpiFormList.add(searchKpiForm);
+            kpiFormList.add(loginKpiForm);
+            kpiFormList.add(favKpiForm);
+
+            return kpiFormList;
+        } else {
+            KpiForm kpiForm = new KpiForm();
+            kpiForm.setServiceName(service);
+            kpiForm.setAvgRespTime(avgFavoriteResponseTime);
+            kpiForm.setMaxRespTime(maxFavoriteResponseTime);
+            kpiForm.setMinRespTime(minFavoriteResponseTime);
+            kpiForm.setStartTime(startDate);
+            kpiForm.setEndTime(endDate);
+            kpiFormList.add(kpiForm);
             return kpiFormList;
         }
     }
