@@ -51,7 +51,6 @@ for (let i = 0; i < request_count; i++) {
 	    'Content-Length': data.length
 	  }
 	}
-	console.log(data)
 	const req = https.request(options, (res) => {
 		responses.push(res);
 		completed_requests++;
