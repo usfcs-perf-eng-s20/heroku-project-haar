@@ -1,5 +1,5 @@
 var config = {
-	"hostname": "prod-analytics-boot.herokuapp.com",
+	"hostname": "analytics-boot.herokuapp.com",
 	"path": "/saveEdr",
 	"services": [
 		{
