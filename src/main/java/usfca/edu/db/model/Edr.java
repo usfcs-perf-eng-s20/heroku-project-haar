@@ -35,7 +35,7 @@ public class Edr {
     private String    username;
 
     @Column(name = "responseCode")
-    private int    responseCode;
+    private int       responseCode;
 
     @Column(name = "success")
     private boolean   success;
@@ -47,7 +47,7 @@ public class Edr {
     public Edr(EdrForm edrForm) {
         super();
         try {
-            this.timestamp = new Timestamp(Long.parseLong(edrForm.getTimestamp()));
+            this.timestamp = new Timestamp(edrForm.getTimestamp());
         } catch (Exception e) {
             this.timestamp = new Timestamp(System.currentTimeMillis());
         }

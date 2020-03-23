@@ -6,7 +6,7 @@ public class EdrForm {
 
     private String  path;
 
-    private float  timestamp;
+    private long    timestamp;
 
     private String  method;
 
@@ -14,7 +14,7 @@ public class EdrForm {
 
     private long    processingTimeInMiliseconds;
 
-    private int  responseCode;
+    private int     responseCode;
 
     private boolean success;
 
@@ -27,7 +27,7 @@ public class EdrForm {
         return path;
     }
 
-    public float getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
@@ -57,7 +57,7 @@ public class EdrForm {
         this.path = path;
     }
 
-    public void setTimestamp(float timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
