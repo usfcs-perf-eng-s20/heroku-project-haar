@@ -17,7 +17,7 @@ public class Edr {
     private Long      id;
 
     @Column(name = "timestamp")
-    private Timestamp timestamp;
+    private long timestamp;
 
     @Column(name = "processingTimeInMiliseconds")
     private long      processingTimeInMiliseconds;
@@ -47,9 +47,9 @@ public class Edr {
     public Edr(EdrForm edrForm) {
         super();
         try {
-            this.timestamp = new Timestamp(edrForm.getTimestamp());
+            this.timestamp = edrForm.getTimestamp();
         } catch (Exception e) {
-            this.timestamp = new Timestamp(System.currentTimeMillis());
+            this.timestamp = System.currentTimeMillis();
         }
         this.processingTimeInMiliseconds = edrForm.getProcessingTimeInMiliseconds();
         this.serviceName = edrForm.getServiceName();
@@ -68,11 +68,11 @@ public class Edr {
         this.id = id;
     }
 
-    public Timestamp getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
