@@ -8,15 +8,16 @@ public class EdrForm {
 
     private String  timestamp;
 
-    private String  method;
+    private String  method;                      //GET POST 
 
     private String  username;
 
-    private long    processingTimeInMiliseconds;
+    private long    processingTimeInMiliseconds; //
 
-    private String  responseCode;
+    private String  responseCode;                // 403 Forbidden , 401 UnAuthrozied , 404 Not Found:
 
-    private boolean success;
+    //Ex: Search Team Fail: Internal Error Ex: Login Authentication?? 
+    private boolean success;                     //YES!! Exception!!
 
     // Getter Methods 
     public String getServiceName() {
@@ -37,10 +38,6 @@ public class EdrForm {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getResponseCode() {
-        return responseCode;
     }
 
     public boolean getSuccess() {
@@ -69,10 +66,6 @@ public class EdrForm {
         this.username = username;
     }
 
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
-    }
-
     public void setSuccess(boolean success) {
         this.success = success;
     }
@@ -83,6 +76,14 @@ public class EdrForm {
 
     public void setProcessingTimeInMiliseconds(long processingTimeInMiliseconds) {
         this.processingTimeInMiliseconds = processingTimeInMiliseconds;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
     }
 
 }
