@@ -35,7 +35,7 @@ public class Edr {
     private String    username;
 
     @Column(name = "responseCode")
-    private String    responseCode;
+    private int       responseCode;
 
     @Column(name = "success")
     private boolean   success;
@@ -56,7 +56,20 @@ public class Edr {
         this.path = edrForm.getPath();
         this.method = edrForm.getMethod();
         this.username = edrForm.getUsername();
-        this.responseCode = edrForm.getResponseCode();
+
+        int responseCodeInt = -1;
+        try {
+            responseCodeInt = Integer.parseInt(edrForm.getResponseCode());
+            if (edrForm.getResponseCode().length() >= 3) {
+                //403 Forbidden ---> 403
+                edrForm.setResponseCode(edrForm.getResponseCode().substring(0, 2));
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            this.responseCode = -1;
+        }
+        this.responseCode = responseCodeInt;
+
         this.success = edrForm.getSuccess();
     }
 
@@ -116,20 +129,20 @@ public class Edr {
         this.username = username;
     }
 
-    public String getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
-    }
-
     public boolean isSuccess() {
         return success;
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 
 }
