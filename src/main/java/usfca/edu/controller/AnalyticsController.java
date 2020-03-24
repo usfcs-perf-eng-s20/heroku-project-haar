@@ -137,6 +137,13 @@ public class AnalyticsController {
         } else {
             System.out.println("Analytics is OFF!");
         }
+
+        /**
+         * TODO: @Razan 
+         * Create a responseObject ("confirm": true,
+                                    "message": "Config updated successfully");
+                                    return this object!!
+         */
         return "Config updated successfully";
     }
 
