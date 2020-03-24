@@ -122,4 +122,9 @@ public class AnalyticsController {
         }
 
     }
+
+    @GetMapping("/")
+    String index() {
+        return "Analytics Service is running";
+    }
 }
