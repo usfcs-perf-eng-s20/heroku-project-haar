@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import usfca.edu.json.model.ConfigForm;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.json.model.KpiForm;
 import usfca.edu.json.model.StatisticForm;
@@ -126,5 +127,28 @@ public class AnalyticsController {
     @GetMapping("/")
     String index() {
         return "Analytics Service is running";
+    }
+
+    @ApiOperation(value = "This API will configure Analytics!", response = String.class)
+    @PostMapping("/config")
+    @ResponseStatus(value = HttpStatus.OK)
+    String config(@RequestBody ConfigForm configForm) {
+        /**
+         * 
+         * TODO:  To be defined in future! We don't have any endpoints speaking with....
+         */
+        if (configForm.isAnalytics()) {
+            System.out.println("Analytics is ON!");
+        } else {
+            System.out.println("Analytics is OFF!");
+        }
+
+        /**
+         * TODO: @Razan 
+         * Create a responseObject ("confirm": true,
+                                    "message": "Config updated successfully");
+                                    return this object!!
+         */
+        return "Config updated successfully";
     }
 }
