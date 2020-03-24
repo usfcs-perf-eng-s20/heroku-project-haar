@@ -62,7 +62,7 @@ public class Edr {
             System.out.println("Incoming Response Code:" + edrForm.getResponseCode());
             if (edrForm.getResponseCode().length() >= 3) {
                 //403 Forbidden ---> 403
-                edrForm.setResponseCode(edrForm.getResponseCode().substring(0, 2));
+                edrForm.setResponseCode(edrForm.getResponseCode().substring(0, 3));
                 System.out.println("Respons Code New:" + edrForm.getResponseCode());
                 responseCodeInt = Integer.parseInt(edrForm.getResponseCode());
             }
