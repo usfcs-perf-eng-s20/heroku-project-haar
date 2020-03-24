@@ -307,7 +307,7 @@ public class EdrService {
         }
     }
 
-    public List<KpiForm> convertIntoOneCumulativeKpiForm(String service, List<Edr> edrList,
+    private List<KpiForm> convertIntoOneCumulativeKpiForm(String service, List<Edr> edrList,
                                                          long startTime, long endTime) {
         System.out.println("EdrService.convertIntoOneCumulativeKpiForm.");
 
@@ -377,55 +377,40 @@ public class EdrService {
 
         if (service == null) {
             // ALL
-            KpiForm kpiallForm = new KpiForm();
-            kpiallForm.setServiceName("All");
-            kpiallForm.setAvgRespTime(avgResponseTime);
-            kpiallForm.setMaxRespTime(maxResponseTime);
-            kpiallForm.setMinRespTime(minResponseTime);
-            kpiallForm.setStartTime(startDate);
-            kpiallForm.setEndTime(endDate);
+            KpiForm kpiAllForm = setKpiForm("All", avgResponseTime,
+                    maxResponseTime, minResponseTime, startDate, endDate);
 
-            KpiForm searchKpiForm = new KpiForm();
-            searchKpiForm.setServiceName("search");
-            searchKpiForm.setAvgRespTime(avgSearchResponseTime);
-            searchKpiForm.setMaxRespTime(maxSearchResponseTime);
-            searchKpiForm.setMinRespTime(minSearchResponseTime);
-            searchKpiForm.setStartTime(startDate);
-            searchKpiForm.setEndTime(endDate);
+            KpiForm searchKpiForm = setKpiForm("search", avgSearchResponseTime,
+                    maxSearchResponseTime, minSearchResponseTime, startDate, endDate);
 
-            KpiForm loginKpiForm = new KpiForm();
-            loginKpiForm.setServiceName("login");
-            loginKpiForm.setAvgRespTime(avgLoginResponseTime);
-            loginKpiForm.setMaxRespTime(maxLoginResponseTime);
-            loginKpiForm.setMinRespTime(minLoginResponseTime);
-            loginKpiForm.setStartTime(startDate);
-            loginKpiForm.setEndTime(endDate);
+            KpiForm loginKpiForm = setKpiForm("login", avgLoginResponseTime,
+                    maxLoginResponseTime, minLoginResponseTime, startDate, endDate);
 
-            KpiForm favKpiForm = new KpiForm();
-            favKpiForm.setServiceName("favorites");
-            favKpiForm.setAvgRespTime(avgFavoriteResponseTime);
-            favKpiForm.setMaxRespTime(maxFavoriteResponseTime);
-            favKpiForm.setMinRespTime(minFavoriteResponseTime);
-            favKpiForm.setStartTime(startDate);
-            favKpiForm.setEndTime(endDate);
+            KpiForm favKpiForm = setKpiForm("favorites", avgFavoriteResponseTime,
+                    maxFavoriteResponseTime, minFavoriteResponseTime, startDate, endDate);
 
-            kpiFormList.add(kpiallForm);
+            kpiFormList.add(kpiAllForm);
             kpiFormList.add(searchKpiForm);
             kpiFormList.add(loginKpiForm);
             kpiFormList.add(favKpiForm);
 
-            return kpiFormList;
         } else {
-            KpiForm kpiForm = new KpiForm();
-            kpiForm.setServiceName(service);
-            kpiForm.setAvgRespTime(avgFavoriteResponseTime);
-            kpiForm.setMaxRespTime(maxFavoriteResponseTime);
-            kpiForm.setMinRespTime(minFavoriteResponseTime);
-            kpiForm.setStartTime(startDate);
-            kpiForm.setEndTime(endDate);
-            kpiFormList.add(kpiForm);
-            return kpiFormList;
+            //TODO:
+            //Depend on the service name, set the KpiForm
         }
+        return kpiFormList;
+    }
+
+    private KpiForm setKpiForm(String service, double avgResponseTime, double maxResponseTime, double minResponseTime,
+                       Date startDate, Date endDate) {
+        KpiForm kpiForm = new KpiForm();
+        kpiForm.setServiceName(service);
+        kpiForm.setAvgRespTime(avgResponseTime);
+        kpiForm.setMaxRespTime(maxResponseTime);
+        kpiForm.setMinRespTime(minResponseTime);
+        kpiForm.setStartTime(startDate);
+        kpiForm.setEndTime(endDate);
+        return kpiForm;
     }
 
 }
