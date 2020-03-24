@@ -76,12 +76,12 @@ public class EdrService {
             if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
                 List<Edr> edrList = edrRepository
                         .findBySpecificTimeByService(service,
-                                                     new Timestamp(timestampStart),
-                                                     new Timestamp(timestampEnd));
+                                new Timestamp(timestampStart),
+                                new Timestamp(timestampEnd));
                 statFormList.addAll(convertIntoOneCumulativeStatForm(service,
-                                                                     edrList,
-                                                                     timestampStart,
-                                                                     timestampEnd));
+                        edrList,
+                        timestampStart,
+                        timestampEnd));
             } else {//ALL
                 statFormList
                         .addAll(getStatsByTimeWithCumulative(null, timestampStart, timestampEnd));
@@ -100,25 +100,25 @@ public class EdrService {
         if (service == null) {
             System.out.println("Getting edrs for all services.");
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
-                                                                 new Timestamp(timestampEnd));
+                    new Timestamp(timestampEnd));
             System.out.println("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeStatForm(null,
-                                                           edrList,
-                                                           timestampStart,
-                                                           timestampEnd);
+                    edrList,
+                    timestampStart,
+                    timestampEnd);
         } else {
 
             System.out.println("Getting edrs for service:" + service);
 
             List<Edr> edrList = edrRepository
                     .findBySpecificTimeByService(service,
-                                                 new Timestamp(timestampStart),
-                                                 new Timestamp(timestampEnd));
+                            new Timestamp(timestampStart),
+                            new Timestamp(timestampEnd));
             System.out.println("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeStatForm(service,
-                                                           edrList,
-                                                           timestampStart,
-                                                           timestampEnd);
+                    edrList,
+                    timestampStart,
+                    timestampEnd);
         }
 
         return kpiFormList;
@@ -126,8 +126,62 @@ public class EdrService {
 
     public List<KpiForm> calculateKpiByTimeWithInterval(String service, long timestampStart,
                                                         long timestampEnd, String interval) {
-        // TODO Auto-generated method stub
-        return null;
+
+
+        System.out.println("EdrService.getStatsByTimeWithInterval.");
+
+        List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
+        long timeDifference = timestampEnd - timestampStart;
+        long totalInterval = 1;
+        long eachIntervalInMs = 0;
+        if (interval.equalsIgnoreCase(Constants.INTERVAL_MINUTES)) {
+            totalInterval = timeDifference / Constants.MINUTES_MS;
+            eachIntervalInMs = Constants.MINUTES_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_HOURS)) {
+            totalInterval = timeDifference / Constants.HOURS_MS;
+            eachIntervalInMs = Constants.HOURS_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_DAYS)) {
+            totalInterval = timeDifference / Constants.DAYS_MS;
+            eachIntervalInMs = Constants.DAYS_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_WEEKS)) {
+            totalInterval = timeDifference / Constants.WEEKS_MS;
+            eachIntervalInMs = Constants.WEEKS_MS;
+        } else {
+            /**
+             * DEFAULT..
+             */
+            return calculateKpiByTimeWithCumulative(null, timestampStart, timestampEnd);
+        }
+
+        System.out.println("TimeDifference:" + timeDifference);
+        System.out.println("TotalInterval:" + totalInterval);
+
+        if (totalInterval == 0) {
+            System.out.println("TotalInterval:" + totalInterval
+                    + ", Can not divide into intervals. So calculating cumulative.");
+            return calculateKpiByTimeWithCumulative(null, timestampStart, timestampEnd);
+        }
+
+        for (int i = 1; i <= totalInterval; i++) {
+            System.out.println(i + ". interval...");
+            timestampEnd = timestampStart + eachIntervalInMs;
+
+            if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
+                List<Edr> edrList = edrRepository
+                        .findBySpecificTimeByService(service,
+                                new Timestamp(timestampStart),
+                                new Timestamp(timestampEnd));
+                kpiFormList.addAll(convertIntoOneCumulativeKpiForm(service,
+                        edrList,
+                        timestampStart,
+                        timestampEnd));
+            } else {//ALL
+                kpiFormList
+                        .addAll(calculateKpiByTimeWithCumulative(null, timestampStart, timestampEnd));
+            }
+            timestampStart = timestampEnd;
+        }
+        return kpiFormList;
     }
 
     public List<KpiForm> calculateKpiByTimeWithCumulative(String service, long timestampStart,
@@ -137,19 +191,19 @@ public class EdrService {
         if (service == null) {
             System.out.println("Getting KPIs for all services.");
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
-                                                                 new Timestamp(timestampEnd));
+                    new Timestamp(timestampEnd));
             System.out.println("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeKpiForm(service,
-                                                          edrList,
-                                                          timestampStart,
-                                                          timestampEnd);
+                    edrList,
+                    timestampStart,
+                    timestampEnd);
 
         } else {
             System.out.println("Getting KPIs for service:" + service);
             List<Edr> edrList = edrRepository
                     .findBySpecificTimeByService(service,
-                                                 new Timestamp(timestampStart),
-                                                 new Timestamp(timestampEnd));
+                            new Timestamp(timestampStart),
+                            new Timestamp(timestampEnd));
 
             System.out
                     .print("Calculate cumulative KPI values for all services in a given StartTime:"
@@ -166,9 +220,9 @@ public class EdrService {
     }
 
     /**
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param edrList
      * @return
      */
