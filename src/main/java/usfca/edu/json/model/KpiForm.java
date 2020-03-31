@@ -115,6 +115,9 @@ public class KpiForm {
                 ", avgRespTime=" + avgRespTime +
                 ", minRespTime=" + minRespTime +
                 ", maxRespTime=" + maxRespTime +
+                ", avgRpsTime=" + avgRpsTime +
+                ", minRpsTime=" + minRpsTime +
+                ", maxRpsTime=" + maxRpsTime +
                 '}';
     }
 }
