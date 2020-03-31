@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import usfca.edu.db.model.Edr;
+import usfca.edu.db.model.Statistic;
 
 @Repository
 public interface EdrRepository extends JpaRepository<Edr, Long> {
@@ -34,10 +35,9 @@ public interface EdrRepository extends JpaRepository<Edr, Long> {
     public int findBySpecificTimeBySuccess(Timestamp timestampStart, Timestamp timestampEnd,
                                             boolean success);
 
-    @Query("SELECT MIN(e.processingTimeInMiliseconds), " +
-            "MAX(e.processingTimeInMiliseconds), " +
-            "AVG(e.processingTimeInMiliseconds) FROM Edr e " +
+    @Query("SELECT new usfca.edu.db.model.Statistic(MIN(e.processingTimeInMiliseconds) ,MAX(e.processingTimeInMiliseconds), AVG(e.processingTimeInMiliseconds))" +
+            "FROM Edr e " +
             "WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd")
-    public int[] findKpiByTimestamp(Timestamp timestampStart, Timestamp timestampEnd);
+    public Statistic findKpiByTimestamp(Timestamp timestampStart, Timestamp timestampEnd);
 
 }

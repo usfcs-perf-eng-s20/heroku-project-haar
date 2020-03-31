@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import usfca.edu.config.Constants;
 import usfca.edu.db.model.Edr;
+import usfca.edu.db.model.Statistic;
 import usfca.edu.json.model.EdrForm;
 import usfca.edu.json.model.KpiForm;
 import usfca.edu.json.model.StatisticForm;
@@ -494,10 +495,10 @@ public class EdrService {
         List<KpiForm> kpiFormList = null;
         if (service == null) {
             System.out.println("Getting KPIs for all services.");
-            int[] data = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
-            for(int i=0; i<data.length;i++){
-                System.out.println("DATA[" + i + "]: "+data[i]);
-            }
+            Statistic statistic = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
+            System.out.println("MIN: " + statistic.getMin());
+            System.out.println("MAX: " + statistic.getMax());
+            System.out.println("AVG: " + statistic.getAvg());
 
         } else {
             System.out.println("Getting KPIs for service:" + service);
