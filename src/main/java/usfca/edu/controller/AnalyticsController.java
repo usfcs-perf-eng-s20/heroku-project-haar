@@ -58,7 +58,7 @@ public class AnalyticsController {
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
             System.out.println("GetKpis API called without interval or service.");
-            kpiFormList = edrService.calculateKpiByTimeWithCumulative(service, startTime, endTime);
+            kpiFormList = edrService.calculateKpiByTimeWithCumulativeV2(service, startTime, endTime);
         } else {
             System.out.println("GetKpis API called with interval:" + interval + " and service :"
                     + service);

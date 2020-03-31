@@ -34,4 +34,10 @@ public interface EdrRepository extends JpaRepository<Edr, Long> {
     public int findBySpecificTimeBySuccess(Timestamp timestampStart, Timestamp timestampEnd,
                                             boolean success);
 
+    @Query("SELECT MIN(e.processingTimeInMiliseconds), " +
+            "MAX(e.processingTimeInMiliseconds), " +
+            "AVG(e.processingTimeInMiliseconds) FROM Edr e " +
+            "WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd")
+    public int[] findKpiByTimestamp(Timestamp timestampStart, Timestamp timestampEnd);
+
 }

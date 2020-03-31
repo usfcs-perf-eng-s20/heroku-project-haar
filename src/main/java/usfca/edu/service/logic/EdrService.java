@@ -488,6 +488,39 @@ public class EdrService {
         return statFormList;
     }
 
+    public List<KpiForm> calculateKpiByTimeWithCumulativeV2(String service, long timestampStart,
+                                                          long timestampEnd) {
+        System.out.println("EdrService.calculateKpiByTimeWithCumulative.");
+        List<KpiForm> kpiFormList = null;
+        if (service == null) {
+            System.out.println("Getting KPIs for all services.");
+            int[] data = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
+            for(int i=0; i<data.length;i++){
+                System.out.println("DATA[" + i + "]: "+data[i]);
+            }
+
+        } else {
+            System.out.println("Getting KPIs for service:" + service);
+            List<Edr> edrList = edrRepository
+                    .findBySpecificTimeByService(service,
+                            new Timestamp(timestampStart),
+                            new Timestamp(timestampEnd));
+
+            System.out
+                    .print("Calculate cumulative KPI values for all services in a given StartTime:"
+                            + timestampStart + ",EndTime:" + timestampEnd);
+
+            /**
+             * return cumulative KPI values as a form.
+             */
+
+        }
+
+        return kpiFormList;
+
+    }
+
+
     private StatisticForm getStatFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
         Date startDate = new Date(new Timestamp(timestampStart).getTime());
         Date endDate = new Date(new Timestamp(timestampEnd).getTime());
