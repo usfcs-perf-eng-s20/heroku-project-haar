@@ -12,9 +12,9 @@ public class KpiForm {
 
     private double avgRespTime;
 
-    private double minRespTime;
+    private long minRespTime;
 
-    private double maxRespTime;
+    private long maxRespTime;
 
     private double avgRpsTime;
 
@@ -25,21 +25,13 @@ public class KpiForm {
     public KpiForm() {
     }
 
-    public KpiForm(Date startTime, Date endTime, String serviceName, double avgRespTime, double minRespTime, double maxRespTime) {
+    public KpiForm(Date startTime, Date endTime, String serviceName, double avgRespTime, long minRespTime, long maxRespTime) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.serviceName = serviceName;
         this.avgRespTime = avgRespTime;
         this.minRespTime = minRespTime;
         this.maxRespTime = maxRespTime;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
     }
 
     public Date getStartTime() {
@@ -58,6 +50,14 @@ public class KpiForm {
         this.endTime = endTime;
     }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     public double getAvgRespTime() {
         return avgRespTime;
     }
@@ -66,19 +66,19 @@ public class KpiForm {
         this.avgRespTime = avgRespTime;
     }
 
-    public double getMinRespTime() {
+    public long getMinRespTime() {
         return minRespTime;
     }
 
-    public void setMinRespTime(double minRespTime) {
+    public void setMinRespTime(long minRespTime) {
         this.minRespTime = minRespTime;
     }
 
-    public double getMaxRespTime() {
+    public long getMaxRespTime() {
         return maxRespTime;
     }
 
-    public void setMaxRespTime(double maxRespTime) {
+    public void setMaxRespTime(long maxRespTime) {
         this.maxRespTime = maxRespTime;
     }
 
@@ -106,4 +106,15 @@ public class KpiForm {
         this.maxRpsTime = maxRpsTime;
     }
 
+    @Override
+    public String toString() {
+        return "KpiForm{" +
+                "startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", serviceName='" + serviceName + '\'' +
+                ", avgRespTime=" + avgRespTime +
+                ", minRespTime=" + minRespTime +
+                ", maxRespTime=" + maxRespTime +
+                '}';
+    }
 }

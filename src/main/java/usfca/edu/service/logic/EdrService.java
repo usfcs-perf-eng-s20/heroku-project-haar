@@ -319,10 +319,10 @@ public class EdrService {
                 totalProcessingTime = 0;
         double avgSearchResponseTime = 0, avgLoginResponseTime = 0, avgFavoriteResponseTime = 0,
                 avgResponseTime = 0;
-        double minSearchResponseTime = Integer.MAX_VALUE, minLoginResponseTime = Integer.MAX_VALUE,
-                minFavoriteResponseTime = Integer.MAX_VALUE, minResponseTime = Integer.MAX_VALUE;
-        double maxSearchResponseTime = Integer.MIN_VALUE, maxLoginResponseTime = Integer.MIN_VALUE,
-                maxFavoriteResponseTime = Integer.MIN_VALUE, maxResponseTime = Integer.MIN_VALUE;
+        long minSearchResponseTime = Long.MAX_VALUE, minLoginResponseTime = Long.MAX_VALUE,
+                minFavoriteResponseTime = Long.MAX_VALUE, minResponseTime = Long.MAX_VALUE;
+        long maxSearchResponseTime = Long.MIN_VALUE, maxLoginResponseTime = Long.MIN_VALUE,
+                maxFavoriteResponseTime = Long.MIN_VALUE, maxResponseTime = Long.MIN_VALUE;
 
         Date startDate = new Date(new Timestamp(startTime).getTime());
         Date endDate = new Date(new Timestamp(endTime).getTime());
@@ -403,7 +403,7 @@ public class EdrService {
         return kpiFormList;
     }
 
-    private KpiForm setKpiForm(String service, double avgResponseTime, double maxResponseTime, double minResponseTime,
+    private KpiForm setKpiForm(String service, double avgResponseTime, long maxResponseTime, long minResponseTime,
                        Date startDate, Date endDate) {
         KpiForm kpiForm = new KpiForm();
         kpiForm.setServiceName(service);
@@ -507,6 +507,7 @@ public class EdrService {
 
         }
 
+        System.out.println("KPI List size: " + kpiFormList.size());
         return kpiFormList;
 
     }
