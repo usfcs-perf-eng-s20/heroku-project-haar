@@ -98,7 +98,7 @@ public class AnalyticsController {
                 || service.equalsIgnoreCase("")) {
             System.out.println("GetStats API called without interval or service.");
             statisticFormList = edrService
-                    .getStatsByTimeWithCumulative(service, startTime, endTime);
+                    .getStatsByTimeWithCumulativeV2(service, startTime, endTime);
         } else {
             System.out.println("GetStats API called with interval:" + interval + " and service :"
                     + service);

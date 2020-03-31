@@ -4,6 +4,17 @@ import java.util.Date;
 
 public class StatisticForm {
 
+    public StatisticForm() {
+    }
+
+    public StatisticForm(Date startTime, Date endTime, String serviceName, int numApiCalls, int error) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.serviceName = serviceName;
+        this.numApiCalls = numApiCalls;
+        this.error = error;
+    }
+
     private Date   startTime;
 
     private Date   endTime;

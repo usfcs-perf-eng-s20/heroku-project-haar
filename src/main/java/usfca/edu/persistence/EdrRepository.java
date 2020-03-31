@@ -24,4 +24,14 @@ public interface EdrRepository extends JpaRepository<Edr, Long> {
     public List<Edr> findBySpecificTimeByService(String serviceName, Timestamp timestampStart,
                                                  Timestamp timestampEnd);
 
+    @Query("SELECT COUNT(e) FROM Edr e WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd"
+            + " and e.serviceName = :serviceName and e.success = :success")
+    public int findBySpecificTimeByServiceAndSuccess(String serviceName, Timestamp timestampStart,
+                                                 Timestamp timestampEnd, boolean success);
+
+    @Query("SELECT COUNT(e) FROM Edr e WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd"
+            + " and e.success = :success")
+    public int findBySpecificTimeBySuccess(Timestamp timestampStart, Timestamp timestampEnd,
+                                            boolean success);
+
 }

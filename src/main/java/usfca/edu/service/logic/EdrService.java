@@ -414,4 +414,42 @@ public class EdrService {
         return kpiForm;
     }
 
+    public List<StatisticForm> getStatsByTimeWithCumulativeV2(String service, long timestampStart,
+                                                            long timestampEnd) {
+        System.out.println("EdrService.getStatsByTimeWithCumulative.");
+
+        List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
+
+        if (service == null) {
+            System.out.println("Getting edrs for all services.");
+            kpiFormList.add(getStatFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
+            kpiFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
+            kpiFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
+            kpiFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
+        } else {
+            System.out.println("Getting edrs for service:" + service);
+            kpiFormList.add(getStatFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
+        }
+        System.out.println("KPI List size: " + kpiFormList.size());
+        return kpiFormList;
+    }
+
+    private StatisticForm getStatFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
+        Date startDate = new Date(new Timestamp(timestampStart).getTime());
+        Date endDate = new Date(new Timestamp(timestampEnd).getTime());
+        int success = 0, failed = 0;
+        if(serviceName==null){
+            success = edrRepository.findBySpecificTimeBySuccess(new Timestamp(timestampStart),
+                    new Timestamp(timestampEnd), true);
+            failed = edrRepository.findBySpecificTimeBySuccess(new Timestamp(timestampStart),
+                    new Timestamp(timestampEnd), false);
+            return new StatisticForm(startDate, endDate, "All", success + failed, failed);
+        } else {
+            success = edrRepository.findBySpecificTimeByServiceAndSuccess(serviceName, new Timestamp(timestampStart),
+                    new Timestamp(timestampEnd), true);
+            failed = edrRepository.findBySpecificTimeByServiceAndSuccess(serviceName, new Timestamp(timestampStart),
+                    new Timestamp(timestampEnd), false);
+            return new StatisticForm(startDate, endDate, serviceName, success + failed, failed);
+        }
+    }
 }
