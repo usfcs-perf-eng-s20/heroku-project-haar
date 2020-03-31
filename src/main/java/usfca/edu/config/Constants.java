@@ -8,7 +8,7 @@ public class Constants {
 
     public static final String SERVICE_LOGIN     = "login";
 
-    public static final String SERVICE_FAVORITES = "favorites";
+    public static final String SERVICE_FAVORITES = "HIS-FAV-CHECKOUT";
 
     public static final String INTERVAL_MINUTES  = "m";
 
