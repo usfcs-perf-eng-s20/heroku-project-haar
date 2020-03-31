@@ -104,7 +104,7 @@ public class AnalyticsController {
                     + service);
 
             statisticFormList = edrService
-                    .getStatsByTimeWithInterval(service, startTime, endTime, interval);
+                    .getStatsByTimeWithIntervalV2(service, startTime, endTime, interval);
         }
         return statisticFormList;
     }

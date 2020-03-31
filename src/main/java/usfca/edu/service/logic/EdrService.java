@@ -434,6 +434,60 @@ public class EdrService {
         return kpiFormList;
     }
 
+    public List<StatisticForm> getStatsByTimeWithIntervalV2(String service, long timestampStart,
+                                                          long timestampEnd, String interval) {
+
+        System.out.println("EdrService.getStatsByTimeWithInterval.");
+
+        List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
+        long timeDifference = timestampEnd - timestampStart;
+        long totalInterval = 1;
+        long eachIntervalInMs = 0;
+        if (interval.equalsIgnoreCase(Constants.INTERVAL_MINUTES)) {
+            totalInterval = timeDifference / Constants.MINUTES_MS;
+            eachIntervalInMs = Constants.MINUTES_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_HOURS)) {
+            totalInterval = timeDifference / Constants.HOURS_MS;
+            eachIntervalInMs = Constants.HOURS_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_DAYS)) {
+            totalInterval = timeDifference / Constants.DAYS_MS;
+            eachIntervalInMs = Constants.DAYS_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_WEEKS)) {
+            totalInterval = timeDifference / Constants.WEEKS_MS;
+            eachIntervalInMs = Constants.WEEKS_MS;
+        } else {
+            /**
+             * DEFAULT..
+             */
+            return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
+        }
+
+        System.out.println("TimeDifference:" + timeDifference);
+        System.out.println("TotalInterval:" + totalInterval);
+
+        if (totalInterval == 0) {
+            System.out.println("TotalInterval:" + totalInterval
+                    + ", Can not divide into intervals. So calculating cumulative.");
+            return getStatsByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
+        }
+
+        for (int i = 1; i <= totalInterval; i++) {
+            System.out.println("" + i + ". interval...");
+            timestampEnd = timestampStart + eachIntervalInMs;
+
+            if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
+                statFormList.add(getStatFormByServiceNameAndTimeRange(service,
+                        timestampStart,
+                        timestampEnd));
+            } else {//ALL
+                statFormList
+                        .addAll(getStatsByTimeWithCumulativeV2(null, timestampStart, timestampEnd));
+            }
+            timestampStart = timestampEnd;
+        }
+        return statFormList;
+    }
+
     private StatisticForm getStatFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
         Date startDate = new Date(new Timestamp(timestampStart).getTime());
         Date endDate = new Date(new Timestamp(timestampEnd).getTime());
