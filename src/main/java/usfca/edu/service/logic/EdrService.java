@@ -238,6 +238,7 @@ public class EdrService {
         Date endDate = new Date(new Timestamp(endTime).getTime());
 
         for (Edr edr : edrList) {
+            System.out.println(edr.getServiceName());
             if (!edr.isSuccess()) {
                 allErrorCount++;
             }
