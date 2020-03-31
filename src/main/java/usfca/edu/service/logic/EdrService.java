@@ -419,20 +419,20 @@ public class EdrService {
                                                             long timestampEnd) {
         System.out.println("EdrService.getStatsByTimeWithCumulative.");
 
-        List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
+        List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
 
         if (service == null) {
             System.out.println("Getting edrs for all services.");
-            kpiFormList.add(getStatFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
-            kpiFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
-            kpiFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
-            kpiFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
+            statFormList.add(getStatFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
+            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
+            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
+            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
         } else {
             System.out.println("Getting edrs for service:" + service);
-            kpiFormList.add(getStatFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
+            statFormList.add(getStatFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
         }
-        System.out.println("KPI List size: " + kpiFormList.size());
-        return kpiFormList;
+        System.out.println("KPI List size: " + statFormList.size());
+        return statFormList;
     }
 
     public List<StatisticForm> getStatsByTimeWithIntervalV2(String service, long timestampStart,
@@ -489,31 +489,21 @@ public class EdrService {
         return statFormList;
     }
 
-    public List<KpiForm> calculateKpiByTimeWithCumulativeV2(String service, long timestampStart,
-                                                          long timestampEnd) {
+    public List<KpiForm> getKpiByTimeWithCumulativeV2(String service, long timestampStart,
+                                                      long timestampEnd) {
         System.out.println("EdrService.calculateKpiByTimeWithCumulative.");
         List<KpiForm> kpiFormList = null;
         if (service == null) {
             System.out.println("Getting KPIs for all services.");
-            Statistic statistic = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
-            System.out.println("MIN: " + statistic.getMin());
-            System.out.println("MAX: " + statistic.getMax());
-            System.out.println("AVG: " + statistic.getAvg());
+
+            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
+            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
+            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
+            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
 
         } else {
             System.out.println("Getting KPIs for service:" + service);
-            List<Edr> edrList = edrRepository
-                    .findBySpecificTimeByService(service,
-                            new Timestamp(timestampStart),
-                            new Timestamp(timestampEnd));
-
-            System.out
-                    .print("Calculate cumulative KPI values for all services in a given StartTime:"
-                            + timestampStart + ",EndTime:" + timestampEnd);
-
-            /**
-             * return cumulative KPI values as a form.
-             */
+            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
 
         }
 
@@ -521,6 +511,60 @@ public class EdrService {
 
     }
 
+    public List<KpiForm> getKpiByTimeWithIntervalV2(String service, long timestampStart,
+                                                    long timestampEnd, String interval) {
+
+
+        System.out.println("EdrService.getStatsByTimeWithInterval.");
+
+        List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
+        long timeDifference = timestampEnd - timestampStart;
+        long totalInterval = 1;
+        long eachIntervalInMs = 0;
+        if (interval.equalsIgnoreCase(Constants.INTERVAL_MINUTES)) {
+            totalInterval = timeDifference / Constants.MINUTES_MS;
+            eachIntervalInMs = Constants.MINUTES_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_HOURS)) {
+            totalInterval = timeDifference / Constants.HOURS_MS;
+            eachIntervalInMs = Constants.HOURS_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_DAYS)) {
+            totalInterval = timeDifference / Constants.DAYS_MS;
+            eachIntervalInMs = Constants.DAYS_MS;
+        } else if (interval.equalsIgnoreCase(Constants.INTERVAL_WEEKS)) {
+            totalInterval = timeDifference / Constants.WEEKS_MS;
+            eachIntervalInMs = Constants.WEEKS_MS;
+        } else {
+            /**
+             * DEFAULT..
+             */
+            return getKpiByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
+        }
+
+        System.out.println("TimeDifference:" + timeDifference);
+        System.out.println("TotalInterval:" + totalInterval);
+
+        if (totalInterval == 0) {
+            System.out.println("TotalInterval:" + totalInterval
+                    + ", Can not divide into intervals. So calculating cumulative.");
+            return getKpiByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
+        }
+
+        for (int i = 1; i <= totalInterval; i++) {
+            System.out.println(i + ". interval...");
+            timestampEnd = timestampStart + eachIntervalInMs;
+
+            if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
+                kpiFormList.add(getKpiFormByServiceNameAndTimeRange(service,
+                        timestampStart,
+                        timestampEnd));
+            } else {//ALL
+                kpiFormList
+                        .addAll(getKpiByTimeWithCumulativeV2(null, timestampStart, timestampEnd));
+            }
+            timestampStart = timestampEnd;
+        }
+        return kpiFormList;
+    }
 
     private StatisticForm getStatFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
         Date startDate = new Date(new Timestamp(timestampStart).getTime());
@@ -538,6 +582,22 @@ public class EdrService {
             failed = edrRepository.findBySpecificTimeByServiceAndSuccess(serviceName, new Timestamp(timestampStart),
                     new Timestamp(timestampEnd), false);
             return new StatisticForm(startDate, endDate, serviceName, success + failed, failed);
+        }
+    }
+
+    private KpiForm getKpiFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
+        Date startDate = new Date(new Timestamp(timestampStart).getTime());
+        Date endDate = new Date(new Timestamp(timestampEnd).getTime());
+
+
+        if(serviceName==null){
+            Statistic statistic = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
+            return new KpiForm(startDate, endDate, "All",
+                    statistic.getAvg(), statistic.getMin(), statistic.getMax());
+        } else {
+            Statistic statistic = edrRepository.findKpiByTimestampAndService(serviceName, new Timestamp(timestampStart), new Timestamp(timestampEnd));
+            return new KpiForm(startDate, endDate, "All",
+                    statistic.getAvg(), statistic.getMin(), statistic.getMax());
         }
     }
 }

@@ -22,6 +22,18 @@ public class KpiForm {
 
     private double maxRpsTime;
 
+    public KpiForm() {
+    }
+
+    public KpiForm(Date startTime, Date endTime, String serviceName, double avgRespTime, double minRespTime, double maxRespTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.serviceName = serviceName;
+        this.avgRespTime = avgRespTime;
+        this.minRespTime = minRespTime;
+        this.maxRespTime = maxRespTime;
+    }
+
     public String getServiceName() {
         return serviceName;
     }

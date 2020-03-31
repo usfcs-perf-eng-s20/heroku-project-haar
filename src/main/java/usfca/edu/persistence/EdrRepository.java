@@ -40,4 +40,9 @@ public interface EdrRepository extends JpaRepository<Edr, Long> {
             "WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd")
     public Statistic findKpiByTimestamp(Timestamp timestampStart, Timestamp timestampEnd);
 
+    @Query("SELECT new usfca.edu.db.model.Statistic(MIN(e.processingTimeInMiliseconds) ,MAX(e.processingTimeInMiliseconds), AVG(e.processingTimeInMiliseconds))" +
+            "FROM Edr e " +
+            "WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd AND e.serviceName = :serviceName")
+    public Statistic findKpiByTimestampAndService(String serviceName, Timestamp timestampStart, Timestamp timestampEnd);
+
 }
