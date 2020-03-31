@@ -589,18 +589,20 @@ public class EdrService {
     private KpiForm getKpiFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
         Date startDate = new Date(new Timestamp(timestampStart).getTime());
         Date endDate = new Date(new Timestamp(timestampEnd).getTime());
-
+        KpiForm result = null;
 
         if(serviceName==null){
             Statistic statistic = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
             System.out.println(statistic.toString());
-            return new KpiForm(startDate, endDate, "All",
+            result = new KpiForm(startDate, endDate, "All",
                     statistic.getAvg(), statistic.getMin(), statistic.getMax());
         } else {
             Statistic statistic = edrRepository.findKpiByTimestampAndService(serviceName, new Timestamp(timestampStart), new Timestamp(timestampEnd));
             System.out.println(statistic.toString());
-            return new KpiForm(startDate, endDate, serviceName,
+            result = new KpiForm(startDate, endDate, serviceName,
                     statistic.getAvg(), statistic.getMin(), statistic.getMax());
         }
+        System.out.println(result.toString());
+        return result;
     }
 }
