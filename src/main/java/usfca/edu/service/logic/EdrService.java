@@ -120,7 +120,7 @@ public class EdrService {
                     timestampStart,
                     timestampEnd);
         }
-
+        System.out.println("KPI List size: " + kpiFormList.size());
         return kpiFormList;
     }
 
