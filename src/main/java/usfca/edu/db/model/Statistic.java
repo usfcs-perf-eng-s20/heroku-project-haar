@@ -8,10 +8,15 @@ public class Statistic {
     public Statistic() {
     }
 
-    public Statistic(long min, long max, double avg) {
-        this.min = min;
-        this.max = max;
-        this.avg = avg;
+    public Statistic(Long min, Long max, Double avg) {
+        System.out.println("Tuple{" +
+                "min=" + min +
+                ", max=" + max +
+                ", avg='" + avg +
+                '}');
+        this.min = min == null ? 0 : min;
+        this.max = max == null ? 0 : max;
+        this.avg = avg == null ? 0 : avg;
     }
 
     public long getMin() {
