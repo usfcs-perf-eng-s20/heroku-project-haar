@@ -592,11 +592,13 @@ public class EdrService {
 
         if(serviceName==null){
             Statistic statistic = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
+            System.out.println(statistic.toString());
             return new KpiForm(startDate, endDate, "All",
                     statistic.getAvg(), statistic.getMin(), statistic.getMax());
         } else {
             Statistic statistic = edrRepository.findKpiByTimestampAndService(serviceName, new Timestamp(timestampStart), new Timestamp(timestampEnd));
-            return new KpiForm(startDate, endDate, "All",
+            System.out.println(statistic.toString());
+            return new KpiForm(startDate, endDate, serviceName,
                     statistic.getAvg(), statistic.getMin(), statistic.getMax());
         }
     }

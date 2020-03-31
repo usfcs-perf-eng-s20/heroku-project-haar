@@ -37,4 +37,13 @@ public class Statistic {
     public void setAvg(double avg) {
         this.avg = avg;
     }
+
+    @Override
+    public String toString() {
+        return "Statistic{" +
+                "min=" + min +
+                ", max=" + max +
+                ", avg=" + avg +
+                '}';
+    }
 }
