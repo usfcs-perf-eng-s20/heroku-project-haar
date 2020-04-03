@@ -151,4 +151,9 @@ public class AnalyticsController {
          */
         return "Config updated successfully";
     }
+
+    @GetMapping("/loaderio-194394ee21a8f08c9ff74696dc772029")
+    String loaderIo() {
+        return "loaderio-194394ee21a8f08c9ff74696dc772029";
+    }
 }
