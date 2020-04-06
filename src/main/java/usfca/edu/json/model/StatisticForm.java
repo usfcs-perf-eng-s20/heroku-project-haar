@@ -7,7 +7,7 @@ public class StatisticForm {
     public StatisticForm() {
     }
 
-    public StatisticForm(Date startTime, Date endTime, String serviceName, int numApiCalls, int error) {
+    public StatisticForm(Date startTime, Date endTime, String serviceName, long numApiCalls, long error) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.serviceName = serviceName;
@@ -21,9 +21,9 @@ public class StatisticForm {
 
     private String serviceName = "";
 
-    private int    numApiCalls = 0;
+    private long    numApiCalls = 0;
 
-    private int    error       = 0;
+    private long    error       = 0;
 
     public String getServiceName() {
         return serviceName;
@@ -33,7 +33,7 @@ public class StatisticForm {
         this.serviceName = serviceName;
     }
 
-    public int getNumApiCalls() {
+    public long getNumApiCalls() {
         return numApiCalls;
     }
 
@@ -41,7 +41,7 @@ public class StatisticForm {
         this.numApiCalls = numApiCalls;
     }
 
-    public int getError() {
+    public long getError() {
         return error;
     }
 

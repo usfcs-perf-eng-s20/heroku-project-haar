@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import usfca.edu.config.Constants;
+import usfca.edu.db.model.CountForm;
 import usfca.edu.db.model.Edr;
 import usfca.edu.db.model.Statistic;
 import usfca.edu.json.model.EdrForm;
@@ -570,18 +571,28 @@ public class EdrService {
     private StatisticForm getStatFormByServiceNameAndTimeRange(String serviceName, long timestampStart, long timestampEnd){
         Date startDate = new Date(new Timestamp(timestampStart).getTime());
         Date endDate = new Date(new Timestamp(timestampEnd).getTime());
-        int success = 0, failed = 0;
+        long success = 0, failed = 0;
         if(serviceName==null){
-            success = edrRepository.findBySpecificTimeBySuccess(new Timestamp(timestampStart),
-                    new Timestamp(timestampEnd), true);
-            failed = edrRepository.findBySpecificTimeBySuccess(new Timestamp(timestampStart),
-                    new Timestamp(timestampEnd), false);
+            List<CountForm> countForms = edrRepository.getCountApi(new Timestamp(timestampStart),
+                    new Timestamp(timestampEnd));
+            for(int i=0;i<countForms.size();i++){
+                if(countForms.get(i).isSuccess()){
+                    success = countForms.get(i).getCount();
+                } else {
+                    failed = countForms.get(i).getCount();
+                }
+            }
             return new StatisticForm(startDate, endDate, "All", success + failed, failed);
         } else {
-            success = edrRepository.findBySpecificTimeByServiceAndSuccess(serviceName, new Timestamp(timestampStart),
-                    new Timestamp(timestampEnd), true);
-            failed = edrRepository.findBySpecificTimeByServiceAndSuccess(serviceName, new Timestamp(timestampStart),
-                    new Timestamp(timestampEnd), false);
+            List<CountForm> countForms = edrRepository.getCountApiByServiceName(serviceName,
+                    new Timestamp(timestampStart), new Timestamp(timestampEnd));
+            for(int i=0;i<countForms.size();i++){
+                if(countForms.get(i).isSuccess()){
+                    success = countForms.get(i).getCount();
+                } else {
+                    failed = countForms.get(i).getCount();
+                }
+            }
             return new StatisticForm(startDate, endDate, serviceName, success + failed, failed);
         }
     }

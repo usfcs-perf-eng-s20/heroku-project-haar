@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import usfca.edu.db.model.CountForm;
 import usfca.edu.db.model.Edr;
 import usfca.edu.db.model.Statistic;
 
@@ -34,6 +35,17 @@ public interface EdrRepository extends JpaRepository<Edr, Long> {
             + " and e.success = :success")
     public int findBySpecificTimeBySuccess(Timestamp timestampStart, Timestamp timestampEnd,
                                             boolean success);
+
+    @Query("SELECT new usfca.edu.db.model.CountForm(COUNT(e), e.success) " +
+            "FROM Edr e " +
+            "WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd GROUP BY e.success")
+    public List<CountForm> getCountApi(Timestamp timestampStart, Timestamp timestampEnd);
+
+    @Query("SELECT new usfca.edu.db.model.CountForm(COUNT(e), e.success) " +
+            "FROM Edr e " +
+            "WHERE e.timestamp >= :timestampStart and e.timestamp < :timestampEnd and e.serviceName=:serviceName " +
+            "GROUP BY e.success")
+    public List<CountForm> getCountApiByServiceName(String serviceName, Timestamp timestampStart, Timestamp timestampEnd);
 
     @Query("SELECT new usfca.edu.db.model.Statistic(MIN(e.processingTimeInMiliseconds) ,MAX(e.processingTimeInMiliseconds), AVG(e.processingTimeInMiliseconds))" +
             "FROM Edr e " +
