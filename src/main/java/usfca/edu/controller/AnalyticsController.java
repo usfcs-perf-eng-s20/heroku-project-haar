@@ -6,12 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -23,6 +18,7 @@ import usfca.edu.json.model.StatisticForm;
 import usfca.edu.persistence.EdrRepository;
 import usfca.edu.service.logic.EdrService;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class AnalyticsController {
 
