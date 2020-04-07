@@ -154,7 +154,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/loaderio-40c19b8228b02c384e998c96cc829ff3")
-    String loaderIo() {
+    String loaderio() {
         return "loaderio-40c19b8228b02c384e998c96cc829ff3";
     }
 }
