@@ -53,7 +53,7 @@ var config = {
 			]
 		},
 		{
-			"name" : "favorites",
+			"name" : "HIST-FAV-CHECKOUT",
 			"requests" : [
 				{
 					"path": "checkoutMovie",

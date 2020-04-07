@@ -130,7 +130,7 @@ public class AnalyticsController {
     @ResponseStatus(value = HttpStatus.OK)
     String config(@RequestBody ConfigForm configForm) {
         /**
-         * 
+         *
          * TODO:  To be defined in future! We don't have any endpoints speaking with....
          */
         if (configForm.isAnalytics()) {
@@ -140,7 +140,7 @@ public class AnalyticsController {
         }
 
         /**
-         * TODO: @Razan 
+         * TODO: @Razan
          * Create a responseObject ("confirm": true,
                                     "message": "Config updated successfully");
                                     return this object!!
@@ -151,5 +151,10 @@ public class AnalyticsController {
     @GetMapping("/loaderio-194394ee21a8f08c9ff74696dc772029")
     String loaderIo() {
         return "loaderio-194394ee21a8f08c9ff74696dc772029";
+    }
+
+    @GetMapping("/loaderio-40c19b8228b02c384e998c96cc829ff3")
+    String loaderIo() {
+        return "loaderio-40c19b8228b02c384e998c96cc829ff3";
     }
 }
