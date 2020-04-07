@@ -148,13 +148,14 @@ public class AnalyticsController {
         return "Config updated successfully";
     }
 
-    @GetMapping("/loaderio-194394ee21a8f08c9ff74696dc772029")
-    String loaderIo() {
-        return "loaderio-194394ee21a8f08c9ff74696dc772029";
-    }
+    // commenting this out for now
+    // @GetMapping("/loaderio-194394ee21a8f08c9ff74696dc772029")
+    // String loaderIo() {
+    //     return "loaderio-194394ee21a8f08c9ff74696dc772029";
+    // }
 
     @GetMapping("/loaderio-40c19b8228b02c384e998c96cc829ff3")
-    String loaderio() {
+    String loaderIo() {
         return "loaderio-40c19b8228b02c384e998c96cc829ff3";
     }
 }
