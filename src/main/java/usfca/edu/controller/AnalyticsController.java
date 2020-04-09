@@ -5,22 +5,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import usfca.edu.json.model.ConfigForm;
-import usfca.edu.json.model.EdrForm;
-import usfca.edu.json.model.KpiForm;
-import usfca.edu.json.model.StatisticForm;
+import usfca.edu.json.model.*;
 import usfca.edu.persistence.EdrRepository;
 import usfca.edu.service.logic.EdrService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 public class AnalyticsController {
+
+    private final Logger LOG = LoggerFactory.getLogger(AnalyticsController.class);
+    ObjectMapper Obj = new ObjectMapper();
 
     private final EdrRepository edrRepository;
     private final EdrService    edrService;
@@ -89,6 +93,19 @@ public class AnalyticsController {
 
         System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
         System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
+        LogForm logForm = new LogForm("Analytics", 10, false, "Test", "getStats");
+        String jsonStr = null;
+        try {
+            jsonStr = Obj.writeValueAsString(logForm);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        // Displaying JSON String
+        System.out.println(jsonStr);
+
+        LOG.info(jsonStr);
+
 
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
