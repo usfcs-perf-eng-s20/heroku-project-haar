@@ -102,9 +102,7 @@ public class AnalyticsController {
         }
 
         // Displaying JSON String
-        System.out.println(jsonStr);
-
-        LOG.info(jsonStr);
+        System.out.println(logForm.toString());
 
 
         if (interval == null || interval.equalsIgnoreCase("") || service == null
