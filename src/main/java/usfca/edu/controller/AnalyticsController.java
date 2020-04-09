@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
+import com.splunk.logging.SplunkCimLogEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,8 @@ import usfca.edu.service.logic.EdrService;
 @RestController
 public class AnalyticsController {
 
-    private final Logger LOG = LoggerFactory.getLogger(AnalyticsController.class);
+//    private final Logger LOG = LoggerFactory.getLogger(AnalyticsController.class);
+    private final Logger logger = LoggerFactory.getLogger(AnalyticsController.class);
     Gson gson = new Gson();
 
     private final EdrRepository edrRepository;
@@ -102,7 +104,14 @@ public class AnalyticsController {
         }
 
         // Displaying JSON String
-        System.out.println(logForm.toString());
+        SplunkCimLogEvent splunkCimLogEvent = new SplunkCimLogEvent("eventName", "eventId");
+        splunkCimLogEvent.addField("serviceName", "Analytics");
+        splunkCimLogEvent.addField("runtime", 10);
+        splunkCimLogEvent.addField("error", false);
+        splunkCimLogEvent.addField("endpoint", "getStats");
+
+        logger.info(splunkCimLogEvent.toString());
+
 
 
         if (interval == null || interval.equalsIgnoreCase("") || service == null
@@ -128,7 +137,6 @@ public class AnalyticsController {
         System.out.println("test.saveEdr....");
 
         if (edrService.saveEdr(edrForm)) {
-            return "Edr saved successfully!!!!!!!!!!!!";
         } else {
             return "Edr could not be saved!!!!!!!!!!!!";
         }
