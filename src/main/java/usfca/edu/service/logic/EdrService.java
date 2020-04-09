@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import usfca.edu.config.Constants;
+import usfca.edu.controller.AnalyticsController;
 import usfca.edu.db.model.CountForm;
 import usfca.edu.db.model.Edr;
 import usfca.edu.db.model.Statistic;
@@ -20,6 +23,8 @@ import usfca.edu.persistence.EdrRepository;
 @Service
 public class EdrService {
 
+    private final Logger logger = LoggerFactory.getLogger(EdrService.class);
+    
     @Autowired
     private final EdrRepository edrRepository;
 
@@ -37,7 +42,7 @@ public class EdrService {
     public List<StatisticForm> getStatsByTimeWithInterval(String service, long timestampStart,
                                                           long timestampEnd, String interval) {
 
-        System.out.println("EdrService.getStatsByTimeWithInterval.");
+        logger.debug("EdrService.getStatsByTimeWithInterval.");
 
         List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
         long timeDifference = timestampEnd - timestampStart;
@@ -62,17 +67,17 @@ public class EdrService {
             return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
-        System.out.println("TimeDifference:" + timeDifference);
-        System.out.println("TotalInterval:" + totalInterval);
+        logger.debug("TimeDifference:" + timeDifference);
+        logger.debug("TotalInterval:" + totalInterval);
 
         if (totalInterval == 0) {
-            System.out.println("TotalInterval:" + totalInterval
+            logger.debug("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
             return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
-            System.out.println("" + i + ". interval...");
+            logger.debug("" + i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
 
             if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
@@ -95,34 +100,34 @@ public class EdrService {
 
     public List<StatisticForm> getStatsByTimeWithCumulative(String service, long timestampStart,
                                                             long timestampEnd) {
-        System.out.println("EdrService.getStatsByTimeWithCumulative.");
+        logger.debug("EdrService.getStatsByTimeWithCumulative.");
 
         List<StatisticForm> kpiFormList = new ArrayList<StatisticForm>();
 
         if (service == null) {
-            System.out.println("Getting edrs for all services.");
+            logger.debug("Getting edrs for all services.");
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                     new Timestamp(timestampEnd));
-            System.out.println("edrList Size:" + edrList.size());
+            logger.debug("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeStatForm(null,
                     edrList,
                     timestampStart,
                     timestampEnd);
         } else {
 
-            System.out.println("Getting edrs for service:" + service);
+            logger.debug("Getting edrs for service:" + service);
 
             List<Edr> edrList = edrRepository
                     .findBySpecificTimeByService(service,
                             new Timestamp(timestampStart),
                             new Timestamp(timestampEnd));
-            System.out.println("edrList Size:" + edrList.size());
+            logger.debug("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeStatForm(service,
                     edrList,
                     timestampStart,
                     timestampEnd);
         }
-        System.out.println("KPI List size: " + kpiFormList.size());
+        logger.debug("KPI List size: " + kpiFormList.size());
         return kpiFormList;
     }
 
@@ -130,7 +135,7 @@ public class EdrService {
                                                         long timestampEnd, String interval) {
 
 
-        System.out.println("EdrService.getStatsByTimeWithInterval.");
+        logger.debug("EdrService.getStatsByTimeWithInterval.");
 
         List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
         long timeDifference = timestampEnd - timestampStart;
@@ -155,17 +160,17 @@ public class EdrService {
             return calculateKpiByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
-        System.out.println("TimeDifference:" + timeDifference);
-        System.out.println("TotalInterval:" + totalInterval);
+        logger.debug("TimeDifference:" + timeDifference);
+        logger.debug("TotalInterval:" + totalInterval);
 
         if (totalInterval == 0) {
-            System.out.println("TotalInterval:" + totalInterval
+            logger.debug("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
             return calculateKpiByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
-            System.out.println(i + ". interval...");
+            logger.debug(i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
 
             if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
@@ -188,20 +193,20 @@ public class EdrService {
 
     public List<KpiForm> calculateKpiByTimeWithCumulative(String service, long timestampStart,
                                                           long timestampEnd) {
-        System.out.println("EdrService.calculateKpiByTimeWithCumulative.");
+        logger.debug("EdrService.calculateKpiByTimeWithCumulative.");
         List<KpiForm> kpiFormList = null;
         if (service == null) {
-            System.out.println("Getting KPIs for all services.");
+            logger.debug("Getting KPIs for all services.");
             List<Edr> edrList = edrRepository.findBySpecificTime(new Timestamp(timestampStart),
                     new Timestamp(timestampEnd));
-            System.out.println("edrList Size:" + edrList.size());
+            logger.debug("edrList Size:" + edrList.size());
             kpiFormList = convertIntoOneCumulativeKpiForm(service,
                     edrList,
                     timestampStart,
                     timestampEnd);
 
         } else {
-            System.out.println("Getting KPIs for service:" + service);
+            logger.debug("Getting KPIs for service:" + service);
             List<Edr> edrList = edrRepository
                     .findBySpecificTimeByService(service,
                             new Timestamp(timestampStart),
@@ -230,7 +235,7 @@ public class EdrService {
      */
     public List<StatisticForm> convertIntoOneCumulativeStatForm(String service, List<Edr> edrList,
                                                                 long startTime, long endTime) {
-        System.out.println("EdrService.convertIntoOneCumulativeStatForm.");
+        logger.debug("EdrService.convertIntoOneCumulativeStatForm.");
 
         List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
         int allErrorCount = 0, searchErrorCount = 0, loginErrorCount = 0, favoriteErrorCount = 0,
@@ -240,7 +245,7 @@ public class EdrService {
         Date endDate = new Date(new Timestamp(endTime).getTime());
 
         for (Edr edr : edrList) {
-            System.out.println(edr.getServiceName());
+            logger.debug(edr.getServiceName());
             if (!edr.isSuccess()) {
                 allErrorCount++;
             }
@@ -312,7 +317,7 @@ public class EdrService {
 
     private List<KpiForm> convertIntoOneCumulativeKpiForm(String service, List<Edr> edrList,
                                                          long startTime, long endTime) {
-        System.out.println("EdrService.convertIntoOneCumulativeKpiForm.");
+        logger.debug("EdrService.convertIntoOneCumulativeKpiForm.");
 
         List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
         int searchRequestCount = 0, loginRequestCount = 0, favoriteRequestCount = 0;
@@ -371,12 +376,12 @@ public class EdrService {
         avgFavoriteResponseTime = (double) (favoriteProcessingTime / favoriteRequestCount);
         avgResponseTime = (double) (totalProcessingTime / edrList.size());
 
-        System.out.println("avgResponseTime:" + avgResponseTime);
-        System.out.println("totalProcessingTime:" + totalProcessingTime);
-        System.out.println("total requests:" + edrList.size());
-        System.out.println("avgFavoriteResponseTime:" + avgFavoriteResponseTime);
-        System.out.println("favoriteProcessingTime:" + favoriteProcessingTime);
-        System.out.println("favoriteRequestCount:" + favoriteRequestCount);
+        logger.debug("avgResponseTime:" + avgResponseTime);
+        logger.debug("totalProcessingTime:" + totalProcessingTime);
+        logger.debug("total requests:" + edrList.size());
+        logger.debug("avgFavoriteResponseTime:" + avgFavoriteResponseTime);
+        logger.debug("favoriteProcessingTime:" + favoriteProcessingTime);
+        logger.debug("favoriteRequestCount:" + favoriteRequestCount);
 
         if (service == null) {
             // ALL
@@ -418,28 +423,28 @@ public class EdrService {
 
     public List<StatisticForm> getStatsByTimeWithCumulativeV2(String service, long timestampStart,
                                                             long timestampEnd) {
-        System.out.println("EdrService.getStatsByTimeWithCumulative.");
+        logger.debug("EdrService.getStatsByTimeWithCumulative.");
 
         List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
 
         if (service == null) {
-            System.out.println("Getting edrs for all services.");
+            logger.debug("Getting edrs for all services.");
             statFormList.add(getStatFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
             statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
             statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
             statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
         } else {
-            System.out.println("Getting edrs for service:" + service);
+            logger.debug("Getting edrs for service:" + service);
             statFormList.add(getStatFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
         }
-        System.out.println("KPI List size: " + statFormList.size());
+        logger.debug("KPI List size: " + statFormList.size());
         return statFormList;
     }
 
     public List<StatisticForm> getStatsByTimeWithIntervalV2(String service, long timestampStart,
                                                           long timestampEnd, String interval) {
 
-        System.out.println("EdrService.getStatsByTimeWithInterval.");
+        logger.debug("EdrService.getStatsByTimeWithInterval.");
 
         List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
         long timeDifference = timestampEnd - timestampStart;
@@ -464,17 +469,17 @@ public class EdrService {
             return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
         }
 
-        System.out.println("TimeDifference:" + timeDifference);
-        System.out.println("TotalInterval:" + totalInterval);
+        logger.debug("TimeDifference:" + timeDifference);
+        logger.debug("TotalInterval:" + totalInterval);
 
         if (totalInterval == 0) {
-            System.out.println("TotalInterval:" + totalInterval
+            logger.debug("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
             return getStatsByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
-            System.out.println("" + i + ". interval...");
+            logger.debug("" + i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
 
             if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites
@@ -492,10 +497,10 @@ public class EdrService {
 
     public List<KpiForm> getKpiByTimeWithCumulativeV2(String service, long timestampStart,
                                                       long timestampEnd) {
-        System.out.println("EdrService.calculateKpiByTimeWithCumulative.");
+        logger.debug("EdrService.calculateKpiByTimeWithCumulative.");
         List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
         if (service == null) {
-            System.out.println("Getting KPIs for all services.");
+            logger.debug("Getting KPIs for all services.");
 
             kpiFormList.add(getKpiFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
             kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
@@ -503,12 +508,12 @@ public class EdrService {
             kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
 
         } else {
-            System.out.println("Getting KPIs for service:" + service);
+            logger.debug("Getting KPIs for service:" + service);
             kpiFormList.add(getKpiFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
 
         }
 
-        System.out.println("KPI List size: " + kpiFormList.size());
+        logger.debug("KPI List size: " + kpiFormList.size());
         return kpiFormList;
 
     }
@@ -517,7 +522,7 @@ public class EdrService {
                                                     long timestampEnd, String interval) {
 
 
-        System.out.println("EdrService.getStatsByTimeWithInterval.");
+        logger.debug("EdrService.getStatsByTimeWithInterval.");
 
         List<KpiForm> kpiFormList = new ArrayList<KpiForm>();
         long timeDifference = timestampEnd - timestampStart;
@@ -542,17 +547,17 @@ public class EdrService {
             return getKpiByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
         }
 
-        System.out.println("TimeDifference:" + timeDifference);
-        System.out.println("TotalInterval:" + totalInterval);
+        logger.debug("TimeDifference:" + timeDifference);
+        logger.debug("TotalInterval:" + totalInterval);
 
         if (totalInterval == 0) {
-            System.out.println("TotalInterval:" + totalInterval
+            logger.debug("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
             return getKpiByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
-            System.out.println(i + ". interval...");
+            logger.debug(i + ". interval...");
             timestampEnd = timestampStart + eachIntervalInMs;
 
             if (!service.equalsIgnoreCase(Constants.SERVICE_ALL)) {//search,login,favorites

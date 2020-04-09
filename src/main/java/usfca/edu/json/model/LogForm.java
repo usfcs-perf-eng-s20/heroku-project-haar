@@ -60,10 +60,10 @@ public class LogForm {
 
     @Override
     public String toString() {
-        return "serviceName=" + serviceName
+        return "serviceName='" + serviceName + "\'"
                 + " runtime=" + runtime
                 + " error=" + error
-                + " message=" + message
-                + " endpoint='" + endpoint;
+                + " message='" + message + "\'"
+                + " endpoint='" + endpoint + "\'";
     }
 }

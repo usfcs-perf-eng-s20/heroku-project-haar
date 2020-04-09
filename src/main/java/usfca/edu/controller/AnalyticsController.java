@@ -23,16 +23,11 @@ import usfca.edu.service.logic.EdrService;
 @CrossOrigin(maxAge = 3600)
 @RestController
 public class AnalyticsController {
-
-//    private final Logger LOG = LoggerFactory.getLogger(AnalyticsController.class);
     private final Logger logger = LoggerFactory.getLogger(AnalyticsController.class);
-    Gson gson = new Gson();
 
-    private final EdrRepository edrRepository;
     private final EdrService    edrService;
 
-    public AnalyticsController(EdrRepository edrRepository, EdrService edrService) {
-        this.edrRepository = edrRepository;
+    public AnalyticsController(EdrService edrService) {
         this.edrService = edrService;
     }
 
@@ -53,21 +48,24 @@ public class AnalyticsController {
                           @RequestParam("startTime") long startTime,
                           @RequestParam("endTime") long endTime,
                           @RequestParam(required = false) String interval) {
+        long startTimer = System.currentTimeMillis();
         List<KpiForm> kpiFormList;
-        System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
-        System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
 
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
-            System.out.println("GetKpis API called without interval or service.");
             kpiFormList = edrService.getKpiByTimeWithCumulativeV2(service, startTime, endTime);
         } else {
-            System.out.println("GetKpis API called with interval:" + interval + " and service :"
-                    + service);
             kpiFormList = edrService
                     .getKpiByTimeWithIntervalV2(service, startTime, endTime, interval);
         }
 
+
+        long endTimer = System.currentTimeMillis();
+        String message = String.format("GetStats from %s to %s",
+                new Date(new Timestamp(startTime).getTime()).toString(),
+                new Date(new Timestamp(endTime).getTime()).toString());
+        LogForm logForm = new LogForm("Analytics", endTimer - startTimer,
+                false,  message, "getStats");
         return kpiFormList;
     }
 
@@ -91,9 +89,9 @@ public class AnalyticsController {
                                  @RequestParam("startTime") long startTime,
                                  @RequestParam("endTime") long endTime,
                                  @RequestParam(required = false) String interval) {
-        List<StatisticForm> statisticFormList = new ArrayList<StatisticForm>();
 
         long startTimer = System.currentTimeMillis();
+        List<StatisticForm> statisticFormList = new ArrayList<StatisticForm>();
 
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
@@ -119,14 +117,19 @@ public class AnalyticsController {
     @ResponseStatus(value = HttpStatus.OK)
     String saveEdr(@RequestBody EdrForm edrForm) {
 
-        System.out.println("test.saveEdr....");
+        long startTimer = System.currentTimeMillis();
 
-        if (edrService.saveEdr(edrForm)) {
+        boolean result = edrService.saveEdr(edrForm);
+
+        long endTimer = System.currentTimeMillis();
+        String message = String.format("/saveEdr called by %s", edrForm.getServiceName());
+        LogForm logForm = new LogForm("Analytics", endTimer - startTimer,
+                !result,  message, "saveEdr");
+        if(result){
             return "Edr saved successfully!!!!!!!!!!!!";
         } else {
             return "Edr could not be saved!!!!!!!!!!!!";
         }
-
     }
 
     @GetMapping("/")
@@ -143,9 +146,9 @@ public class AnalyticsController {
          * TODO:  To be defined in future! We don't have any endpoints speaking with....
          */
         if (configForm.isAnalytics()) {
-            System.out.println("Analytics is ON!");
+            logger.debug("Analytics is ON!");
         } else {
-            System.out.println("Analytics is OFF!");
+            logger.debug("Analytics is OFF!");
         }
 
         /**
