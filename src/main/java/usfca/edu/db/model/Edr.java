@@ -59,18 +59,15 @@ public class Edr {
 
         int responseCodeInt = -1;
         try {
-            System.out.println("Incoming Response Code:" + edrForm.getResponseCode());
             if (edrForm.getResponseCode().length() >= 3) {
                 //403 Forbidden ---> 403
                 edrForm.setResponseCode(edrForm.getResponseCode().substring(0, 3));
-                System.out.println("Respons Code New:" + edrForm.getResponseCode());
                 responseCodeInt = Integer.parseInt(edrForm.getResponseCode());
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
             this.responseCode = -1;
         }
-        System.out.println("edr.responseCode:" + this.responseCode);
         this.responseCode = responseCodeInt;
 
         this.success = edrForm.getSuccess();

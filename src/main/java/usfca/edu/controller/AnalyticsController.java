@@ -93,39 +93,24 @@ public class AnalyticsController {
                                  @RequestParam(required = false) String interval) {
         List<StatisticForm> statisticFormList = new ArrayList<StatisticForm>();
 
-        System.out.println("Start Time:" + new Date(new Timestamp(startTime).getTime()));
-        System.out.println("End Time:" + new Date(new Timestamp(endTime).getTime()));
-        LogForm logForm = new LogForm("Analytics", 10, false, "Test", "getStats");
-        String jsonStr = null;
-        try {
-            jsonStr = gson.toJson(logForm);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Displaying JSON String
-        SplunkCimLogEvent splunkCimLogEvent = new SplunkCimLogEvent("eventName", "eventId");
-        splunkCimLogEvent.addField("serviceName", "Analytics");
-        splunkCimLogEvent.addField("runtime", 10);
-        splunkCimLogEvent.addField("error", false);
-        splunkCimLogEvent.addField("endpoint", "getStats");
-
-        logger.info(splunkCimLogEvent.toString());
-
-
+        long startTimer = System.currentTimeMillis();
 
         if (interval == null || interval.equalsIgnoreCase("") || service == null
                 || service.equalsIgnoreCase("")) {
-            System.out.println("GetStats API called without interval or service.");
             statisticFormList = edrService
                     .getStatsByTimeWithCumulativeV2(service, startTime, endTime);
         } else {
-            System.out.println("GetStats API called with interval:" + interval + " and service :"
-                    + service);
-
             statisticFormList = edrService
                     .getStatsByTimeWithIntervalV2(service, startTime, endTime, interval);
         }
+
+        long endTimer = System.currentTimeMillis();
+        String message = String.format("GetStats from %s to %s",
+                new Date(new Timestamp(startTime).getTime()).toString(),
+                new Date(new Timestamp(endTime).getTime()).toString());
+        LogForm logForm = new LogForm("Analytics", endTimer - startTimer,
+                false,  message, "getStats");
+        logger.info(logForm.toString());
         return statisticFormList;
     }
 

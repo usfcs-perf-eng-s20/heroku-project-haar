@@ -9,11 +9,6 @@ public class Statistic {
     }
 
     public Statistic(Long min, Long max, Double avg) {
-        System.out.println("Tuple{" +
-                "min=" + min +
-                ", max=" + max +
-                ", avg='" + avg +
-                '}');
         this.min = min == null ? 0 : min;
         this.max = max == null ? 0 : max;
         this.avg = avg == null ? 0 : avg;
