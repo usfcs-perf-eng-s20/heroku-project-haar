@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import usfca.edu.service.logic.EdrService;
 public class AnalyticsController {
 
     private final Logger LOG = LoggerFactory.getLogger(AnalyticsController.class);
-    ObjectMapper Obj = new ObjectMapper();
+    Gson gson = new Gson();
 
     private final EdrRepository edrRepository;
     private final EdrService    edrService;
@@ -96,8 +96,8 @@ public class AnalyticsController {
         LogForm logForm = new LogForm("Analytics", 10, false, "Test", "getStats");
         String jsonStr = null;
         try {
-            jsonStr = Obj.writeValueAsString(logForm);
-        } catch (JsonProcessingException e) {
+            jsonStr = gson.toJson(logForm);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
