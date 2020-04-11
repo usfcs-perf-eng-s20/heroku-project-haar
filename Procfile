@@ -1,0 +1,1 @@
+web: java -javaagent:/app/newrelic/newrelic.jar -jar target/analytics-0.0.1-SNAPSHOT.jar
