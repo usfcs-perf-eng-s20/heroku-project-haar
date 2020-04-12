@@ -12,11 +12,21 @@ public class LogForm {
         this.endpoint = endpoint;
     }
 
+    public LogForm(String serviceName, long runtime, boolean error, String message, String endpoint, Object custom) {
+        this.serviceName = serviceName;
+        this.runtime = runtime;
+        this.error = error;
+        this.message = message;
+        this.endpoint = endpoint;
+        this.custom = custom;
+    }
+
     String serviceName;
     long runtime;
     boolean error;
     String message;
     String endpoint;
+    Object custom;
 
     public String getServiceName() {
         return serviceName;
@@ -64,6 +74,7 @@ public class LogForm {
                 + " runtime=" + runtime
                 + " error=" + error
                 + " message='" + message + "\'"
-                + " endpoint='" + endpoint + "\'";
+                + " endpoint='" + endpoint + "\'"
+                + " " + custom.toString();
     }
 }

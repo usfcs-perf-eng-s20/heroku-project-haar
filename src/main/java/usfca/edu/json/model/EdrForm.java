@@ -86,4 +86,17 @@ public class EdrForm {
         this.responseCode = responseCode;
     }
 
+    @Override
+    public String toString() {
+        return "EdrForm{" +
+                "serviceName='" + serviceName + '\'' +
+                ", path='" + path + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", method='" + method + '\'' +
+                ", username='" + username + '\'' +
+                ", processingTimeInMiliseconds=" + processingTimeInMiliseconds +
+                ", responseCode='" + responseCode + '\'' +
+                ", success=" + success +
+                '}';
+    }
 }

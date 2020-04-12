@@ -124,7 +124,8 @@ public class AnalyticsController {
         long endTimer = System.currentTimeMillis();
         String message = String.format("/saveEdr called by %s", edrForm.getServiceName());
         LogForm logForm = new LogForm("Analytics", endTimer - startTimer,
-                !result,  message, "saveEdr");
+                !result,  message, "saveEdr", edrForm);
+        logger.info(logForm.toString());
         if(result){
             return "Edr saved successfully!!!!!!!!!!!!";
         } else {
