@@ -430,9 +430,9 @@ public class EdrService {
         if (service == null) {
             logger.debug("Getting edrs for all services.");
             statFormList.add(getStatFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
-            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
-            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
-            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
+//            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
+//            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
+//            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
         } else {
             logger.debug("Getting edrs for service:" + service);
             statFormList.add(getStatFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
@@ -475,7 +475,7 @@ public class EdrService {
         if (totalInterval == 0) {
             logger.debug("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
-            return getStatsByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
+            return getStatsByTimeWithCumulativeV2(service, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
@@ -503,9 +503,9 @@ public class EdrService {
             logger.debug("Getting KPIs for all services.");
 
             kpiFormList.add(getKpiFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
-            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
-            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
-            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
+//            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
+//            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
+//            kpiFormList.add(getKpiFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
 
         } else {
             logger.debug("Getting KPIs for service:" + service);
@@ -553,7 +553,7 @@ public class EdrService {
         if (totalInterval == 0) {
             logger.debug("TotalInterval:" + totalInterval
                     + ", Can not divide into intervals. So calculating cumulative.");
-            return getKpiByTimeWithCumulativeV2(null, timestampStart, timestampEnd);
+            return getKpiByTimeWithCumulativeV2(service, timestampStart, timestampEnd);
         }
 
         for (int i = 1; i <= totalInterval; i++) {
