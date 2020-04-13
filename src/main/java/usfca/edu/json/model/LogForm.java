@@ -10,6 +10,7 @@ public class LogForm {
         this.error = error;
         this.message = message;
         this.endpoint = endpoint;
+        this.custom = null;
     }
 
     public LogForm(String serviceName, long runtime, boolean error, String message, String endpoint, Object custom) {
@@ -70,11 +71,12 @@ public class LogForm {
 
     @Override
     public String toString() {
+        String customString = custom == null ? custom.toString() : "";
         return "serviceName='" + serviceName + "\'"
                 + " runtime=" + runtime
                 + " error=" + error
                 + " message='" + message + "\'"
                 + " endpoint='" + endpoint + "\'"
-                + " " + custom.toString();
+                + " " + customString;
     }
 }

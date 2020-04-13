@@ -423,21 +423,21 @@ public class EdrService {
 
     public List<StatisticForm> getStatsByTimeWithCumulativeV2(String service, long timestampStart,
                                                             long timestampEnd) {
-        logger.info("EdrService.getStatsByTimeWithCumulative.");
+        logger.debug("EdrService.getStatsByTimeWithCumulative.");
 
         List<StatisticForm> statFormList = new ArrayList<StatisticForm>();
 
         if (service == null) {
-            logger.info("Getting edrs for all services.");
+            logger.debug("Getting edrs for all services.");
             statFormList.add(getStatFormByServiceNameAndTimeRange(null, timestampStart, timestampEnd));
 //            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_FAVORITES, timestampStart, timestampEnd));
 //            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_LOGIN, timestampStart, timestampEnd));
 //            statFormList.add(getStatFormByServiceNameAndTimeRange(Constants.SERVICE_SEARCH, timestampStart, timestampEnd));
         } else {
-            logger.info("Getting edrs for service:" + service);
+            logger.debug("Getting edrs for service:" + service);
             statFormList.add(getStatFormByServiceNameAndTimeRange(service, timestampStart, timestampEnd));
         }
-        logger.info("KPI List size: " + statFormList.size());
+        logger.debug("KPI List size: " + statFormList.size());
         return statFormList;
     }
 
