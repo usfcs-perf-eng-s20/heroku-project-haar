@@ -72,11 +72,11 @@ public class LogForm {
     @Override
     public String toString() {
         String customString = custom != null ? custom.toString() : "";
-        return "serviceName='" + serviceName + "\'"
+        return "serviceName=" + serviceName
                 + " runtime=" + runtime
                 + " error=" + error
                 + " message='" + message + "\'"
-                + " endpoint='" + endpoint + "\'"
+                + " endpoint=" + endpoint
                 + " " + customString;
     }
 }

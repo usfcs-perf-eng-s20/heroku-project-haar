@@ -1,5 +1,7 @@
 package usfca.edu.json.model;
 
+import com.google.gson.Gson;
+
 public class EdrForm {
 
     private String  serviceName;
@@ -88,15 +90,17 @@ public class EdrForm {
 
     @Override
     public String toString() {
-        return "EdrForm{" +
-                "serviceName='" + serviceName + '\'' +
-                ", path='" + path + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", method='" + method + '\'' +
-                ", username='" + username + '\'' +
-                ", processingTimeInMiliseconds=" + processingTimeInMiliseconds +
-                ", responseCode='" + responseCode + '\'' +
-                ", success=" + success +
-                '}';
+        Gson gson = new Gson();
+        return "EdrForm=" + gson.toJson(this);
+//        return "EdrForm{" +
+//                "serviceName='" + serviceName + '\'' +
+//                ", path='" + path + '\'' +
+//                ", timestamp='" + timestamp + '\'' +
+//                ", method='" + method + '\'' +
+//                ", username='" + username + '\'' +
+//                ", processingTimeInMiliseconds=" + processingTimeInMiliseconds +
+//                ", responseCode='" + responseCode + '\'' +
+//                ", success=" + success +
+//                '}';
     }
 }
