@@ -73,7 +73,7 @@ public class LogForm {
     public String toString() {
         String customString = custom != null ? custom.toString() : "";
         return "serviceName=" + serviceName
-                + " runtime=" + runtime
+                + " runTime=" + runtime
                 + " error=" + error
                 + " message='" + message + "\'"
                 + " endpoint=" + endpoint
