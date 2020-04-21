@@ -66,6 +66,7 @@ public class AnalyticsController {
                 new Date(new Timestamp(endTime).getTime()).toString());
         LogForm logForm = new LogForm("Analytics", endTimer - startTimer,
                 false,  message, "getKpis");
+        logger.info(logForm.toString());
         return kpiFormList;
     }
 
