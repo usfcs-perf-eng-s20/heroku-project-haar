@@ -61,7 +61,7 @@ public class AnalyticsController {
 
 
         long endTimer = System.currentTimeMillis();
-        String message = String.format("GetStats from %s to %s",
+        String message = String.format("GetKpis from %s to %s",
                 new Date(new Timestamp(startTime).getTime()).toString(),
                 new Date(new Timestamp(endTime).getTime()).toString());
         LogForm logForm = new LogForm("Analytics", endTimer - startTimer,
