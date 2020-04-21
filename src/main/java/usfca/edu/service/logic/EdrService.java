@@ -466,7 +466,7 @@ public class EdrService {
             /**
              * DEFAULT..
              */
-            return getStatsByTimeWithCumulative(null, timestampStart, timestampEnd);
+            return getStatsByTimeWithCumulativeV2(service, timestampStart, timestampEnd);
         }
 
         logger.debug("TimeDifference:" + timeDifference);
@@ -587,7 +587,7 @@ public class EdrService {
                     failed = countForms.get(i).getCount();
                 }
             }
-            return new StatisticForm(startDate, endDate, "All", success + failed, failed);
+            return new StatisticForm(startDate, endDate, Constants.SERVICE_ALL, success + failed, failed);
         } else {
             List<CountForm> countForms = edrRepository.getCountApiByServiceName(serviceName,
                     new Timestamp(timestampStart), new Timestamp(timestampEnd));
@@ -609,7 +609,7 @@ public class EdrService {
 
         if(serviceName==null){
             Statistic statistic = edrRepository.findKpiByTimestamp(new Timestamp(timestampStart), new Timestamp(timestampEnd));
-            result = new KpiForm(startDate, endDate, "All",
+            result = new KpiForm(startDate, endDate, Constants.SERVICE_ALL,
                     statistic.getAvg(), statistic.getMin(), statistic.getMax());
         } else {
             Statistic statistic = edrRepository.findKpiByTimestampAndService(serviceName, new Timestamp(timestampStart), new Timestamp(timestampEnd));
